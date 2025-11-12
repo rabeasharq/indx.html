@@ -67,6 +67,31 @@ textarea,input,select{width:100%;padding:8px;border-radius:8px;border:1px solid 
   @page{size:A4;margin:var(--print-edge)}
   .speaker-notes{display:block;border-left:4px solid #000}
 }
+
+/* New styles for enhancements */
+.timer{background:#f0f7ff;padding:8px 12px;border-radius:8px;display:inline-flex;align-items:center;gap:6px;font-size:0.9rem;margin-bottom:10px}
+.timer-icon{color:var(--accent)}
+.time-up{background:#ffe6e6;animation:pulse 1.5s infinite}
+@keyframes pulse{0%{opacity:1}50%{opacity:0.7}100%{opacity:1}}
+.activity-card{background:#f8fbff;border:1px solid rgba(11,94,168,0.1);border-radius:8px;padding:12px;margin:12px 0}
+.activity-card h3{margin:0 0 8px;font-size:1rem;color:var(--accent)}
+.quiz-option{padding:8px;border:1px solid rgba(11,94,168,0.15);border-radius:6px;margin:6px 0;cursor:pointer;transition:all 0.2s}
+.quiz-option:hover{background:rgba(11,94,168,0.05)}
+.quiz-option.selected{background:rgba(11,94,168,0.1);border-color:var(--accent)}
+.quiz-result{background:#e8f5e8;padding:10px;border-radius:8px;margin-top:10px;display:none}
+.timeline{position:relative;padding-right:20px;margin:15px 0}
+.timeline-item{position:relative;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(11,94,168,0.1)}
+.timeline-item:last-child{border-bottom:none}
+.timeline-item::before{content:'';position:absolute;right:-20px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--accent)}
+.timeline-item.current::before{background:#4caf50;box-shadow:0 0 0 3px rgba(76,175,80,0.3)}
+.timeline-time{font-size:0.85rem;color:var(--muted);margin-bottom:4px}
+.timeline-content{font-size:0.95rem}
+.self-assessment{background:#f9f9ff;border-radius:8px;padding:12px;margin:12px 0}
+.assessment-question{margin-bottom:12px}
+.assessment-options{display:flex;gap:8px;flex-wrap:wrap}
+.assessment-option{flex:1;min-width:80px;text-align:center;padding:6px;border:1px solid rgba(11,94,168,0.2);border-radius:6px;cursor:pointer;transition:all 0.2s}
+.assessment-option:hover{background:rgba(11,94,168,0.05)}
+.assessment-option.selected{background:var(--accent);color:white}
 </style>
 </head>
 <body>
@@ -85,13 +110,25 @@ textarea,input,select{width:100%;padding:8px;border-radius:8px;border:1px solid 
         <h2 id="s1-title">الشريحة 1: الترحيب والأهداف
           <span class="small">الوقت: 5 دقائق</span>
         </h2>
+        <div class="timer" id="timer-1">
+          <span class="timer-icon">⏱️</span>
+          <span id="timer-text-1">05:00</span>
+        </div>
         <div class="meta">أهداف الجلسة</div>
         <ul>
           <li>فهم مفهوم الذكاء الاصطناعي وتطبيقاته التعليمية.</li>
           <li>استعراض أدوات عملية لصنع محتوى تعليمي تفاعلي.</li>
           <li>التدرّب على كتابة Prompts فعّالة.</li>
         </ul>
-        <div class="speaker-notes" id="notes-1">نقطة للمدرّب: قدم نفسك واطلب من المشاركين ذكر توقع واحد قبل البدء.</div>
+        
+        <div class="activity-card">
+          <h3>نشاط افتتاحي: مشاركة التوقعات</h3>
+          <p>شارك توقعًا واحدًا لديك من هذه الدورة:</p>
+          <input id="expectationInput" placeholder="اكتب توقعك هنا..." aria-label="توقع" />
+          <button id="addExpectationBtn" style="margin-top:8px">إضافة</button>
+        </div>
+        
+        <div class="output" id="expectationsList" aria-live="polite" style="margin-top:10px"></div>
       </section>
 
       <!-- Slide 2 -->
@@ -99,66 +136,166 @@ textarea,input,select{width:100%;padding:8px;border-radius:8px;border:1px solid 
         <h2 id="s2-title">الشريحة 2: جدول الأعمال
           <span class="small">الوقت: 2 دقائق</span>
         </h2>
+        <div class="timer" id="timer-2">
+          <span class="timer-icon">⏱️</span>
+          <span id="timer-text-2">02:00</span>
+        </div>
         <div class="meta">نظرة سريعة على تقسيم الجلسة</div>
-        <ol>
-          <li>مقدمة ونظري (20 د)</li>
-          <li>أدوات وتجارب عملية (30 د)</li>
-          <li>نشاط مجموعات / كتابة Prompts (25 د)</li>
-          <li>مراجعة وخلاصة (15 د)</li>
-        </ol>
-        <div class="speaker-notes" id="notes-2">أشر للزمن وشجع الالتزام بالمواعيد أثناء الأنشطة.</div>
+        
+        <div class="timeline">
+          <div class="timeline-item current">
+            <div class="timeline-time">5 د - الانطلاق</div>
+            <div class="timeline-content">الترحيب والأهداف</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">2 د - الإطار</div>
+            <div class="timeline-content">جدول الأعمال</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">8 د - مفاهيم</div>
+            <div class="timeline-content">ما هو الذكاء الاصطناعي؟</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">10 د - تطبيقات</div>
+            <div class="timeline-content">حالات استخدام في التعليم</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">10 د - أدوات</div>
+            <div class="timeline-content">أدوات مُقترحة</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">10 د - مهارات</div>
+            <div class="timeline-content">كتابة Prompts فعّالة</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">25 د - تطبيق</div>
+            <div class="timeline-content">نشاط عملي — كتابة Prompt</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">8 د - تقييم</div>
+            <div class="timeline-content">تقييم وتغذية راجعة</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">7 د - أخلاقيات</div>
+            <div class="timeline-content">أخلاقيات وخصوصية</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">3 د - خاتمة</div>
+            <div class="timeline-content">تقييم المشاركين</div>
+          </div>
+        </div>
       </section>
 
       <!-- Slide 3 -->
       <section class="slide" id="slide-3" role="group" aria-labelledby="s3-title">
         <h2 id="s3-title">الشريحة 3: ما هو الذكاء الاصطناعي؟
-          <span class="small">مفهوم مبسّط</span>
+          <span class="small">الوقت: 8 دقائق</span>
         </h2>
+        <div class="timer" id="timer-3">
+          <span class="timer-icon">⏱️</span>
+          <span id="timer-text-3">08:00</span>
+        </div>
         <div class="meta">تعريف عملي</div>
         <p>الذكاء الاصطناعي تقنيات تنتج مخرجات تشبه القرارات البشرية عبر نماذج مبنية على بيانات وتعلم آلي.</p>
-        <div class="speaker-notes" id="notes-3">أمثلة بسيطة: اقتراحات المحتوى، تحليل النصوص، إنشاء أسئلة تلقائية.</div>
+        
+        <div class="activity-card">
+          <h3>نشاط سريع: مفاهيم الذكاء الاصطناعي</h3>
+          <p>ما هو التطبيق الذي تعتقد أنه الأكثر تأثيرًا للذكاء الاصطناعي في التعليم؟</p>
+          <div class="quiz-option" data-correct="false">إنشاء محتوى تعليمي مخصص</div>
+          <div class="quiz-option" data-correct="false">تقييم أداء الطلاب تلقائيًا</div>
+          <div class="quiz-option" data-correct="true">جميع ما سبق</div>
+          <div class="quiz-result" id="quiz-result-3">
+            <strong>الإجابة الصحيحة:</strong> جميع ما سبق - الذكاء الاصطناعي يمكنه تقديم قيمة في كل هذه المجالات.
+          </div>
+        </div>
       </section>
 
       <!-- Slide 4 -->
       <section class="slide" id="slide-4" role="group" aria-labelledby="s4-title">
         <h2 id="s4-title">الشريحة 4: حالات استخدام في التعليم
-          <span class="small">نماذج واقعية</span>
+          <span class="small">الوقت: 10 دقائق</span>
         </h2>
+        <div class="timer" id="timer-4">
+          <span class="timer-icon">⏱️</span>
+          <span id="timer-text-4">10:00</span>
+        </div>
+        <div class="meta">نماذج واقعية</div>
         <ul>
           <li>تصميم خطط دروس مُخصّصة</li>
           <li>توليد أسئلة تقييمية وتقارير مختصرة</li>
           <li>دعم التعلّم الذاتي والتوجيه الذكي</li>
         </ul>
-        <div class="speaker-notes" id="notes-4">اطرح مثالًا من واقع المدرسة أو المؤسسة لتقريب الفكرة.</div>
+        
+        <div class="activity-card">
+          <h3>مناقشة جماعية</h3>
+          <p>ما هو التحدي الأكبر الذي تواجهه في عملك التعليمي الذي يمكن أن يساعدك الذكاء الاصطناعي في حله؟</p>
+          <textarea id="challengeInput" rows="2" placeholder="اكتب التحدي هنا..."></textarea>
+          <button id="saveChallengeBtn" style="margin-top:8px">حفظ</button>
+        </div>
       </section>
 
       <!-- Slide 5 -->
       <section class="slide" id="slide-5" role="group" aria-labelledby="s5-title">
-        <h2 id="s5-title">الشريحة 5: أدوات مُقترحة</h2>
+        <h2 id="s5-title">الشريحة 5: أدوات مُقترحة
+          <span class="small">الوقت: 10 دقائق</span>
+        </h2>
+        <div class="timer" id="timer-5">
+          <span class="timer-icon">⏱️</span>
+          <span id="timer-text-5">10:00</span>
+        </div>
         <div class="meta">أدوات آمنة ومفيدة</div>
         <ul>
           <li>منصات إنشاء محتوى (نماذج توليد الأسئلة، ملخصات الدروس)</li>
           <li>أدوات تحويل النص إلى عرض تقديمي/أنشطة</li>
           <li>أدوات فحص الأصالة والتقويم التكويني</li>
         </ul>
-        <div class="speaker-notes" id="notes-5">اشرح مزايا كل أداة وكيفية قياس المخاطر والخصوصية.</div>
+        
+        <div class="activity-card">
+          <h3>أداة تفاعلية: محاكاة إنشاء محتوى</h3>
+          <p>جرب إنشاء سؤال تعليمي باستخدام الذكاء الاصطناعي:</p>
+          <input id="contentTopic" placeholder="اكتب موضوعًا تعليميًا..." />
+          <button id="generateQuestionBtn" style="margin-top:8px">إنشاء سؤال</button>
+          <div class="output" id="generatedQuestion" style="margin-top:10px"></div>
+        </div>
       </section>
 
       <!-- Slide 6 -->
       <section class="slide" id="slide-6" role="group" aria-labelledby="s6-title">
-        <h2 id="s6-title">الشريحة 6: كتابة Prompts فعّالة</h2>
+        <h2 id="s6-title">الشريحة 6: كتابة Prompts فعّالة
+          <span class="small">الوقت: 10 دقائق</span>
+        </h2>
+        <div class="timer" id="timer-6">
+          <span class="timer-icon">⏱️</span>
+          <span id="timer-text-6">10:00</span>
+        </div>
         <div class="meta">قواعد بسيطة</div>
         <ul>
           <li>كن واضحاً ومحدداً في المطلوب</li>
           <li>حدّد مستوى الطالب والناتج المتوقع</li>
           <li>اطلب أمثلة، تنسيقات، وقياسات الأداء</li>
         </ul>
-        <div class="speaker-notes" id="notes-6">أعطِ مثالاً سيئًا ثم حسّنه أمام المشاركين.</div>
+        
+        <div class="activity-card">
+          <h3>تمرين: تحسين Prompt</h3>
+          <p>Prompt ضعيف: "اكتب أسئلة عن الرياضيات"</p>
+          <p>كيف يمكن تحسين هذا الـ Prompt؟</p>
+          <textarea id="improvedPrompt" rows="2" placeholder="اكتب الـ Prompt المحسّن هنا..."></textarea>
+          <button id="checkPromptBtn" style="margin-top:8px">تحقق من الإجابة</button>
+          <div class="output" id="promptFeedback" style="margin-top:10px;display:none">
+            <strong>مثال محسّن:</strong> "اكتب 5 أسئلة اختيار من متعدد في الرياضيات لطلاب الصف السادس حول الكسور، مع توفير إجابات مختصرة وتفسيرات."
+          </div>
+        </div>
       </section>
 
       <!-- Slide 7 -->
       <section class="slide" id="slide-7" role="group" aria-labelledby="s7-title">
-        <h2 id="s7-title">الشريحة 7: نشاط عملي — كتابة Prompt</h2>
+        <h2 id="s7-title">الشريحة 7: نشاط عملي — كتابة Prompt
+          <span class="small">الوقت: 25 دقيقة</span>
+        </h2>
+        <div class="timer" id="timer-7">
+          <span class="timer-icon">⏱️</span>
+          <span id="timer-text-7">25:00</span>
+        </div>
         <div class="meta">25 دقيقة — مجموعات صغيرة</div>
         <p>مهمة: صغ Prompt يطلب من النموذج توليد 5 أسئلة قصيرة متعددة الاختيارات مع إجابات مختصرة حول موضوع تختارونه.</p>
 
@@ -167,81 +304,176 @@ textarea,input,select{width:100%;padding:8px;border-radius:8px;border:1px solid 
           <button id="simulateBtn">محاكاة إجابة</button>
         </div>
         <div class="output" id="promptOutput" aria-live="polite"></div>
-        <div class="speaker-notes" id="notes-7">وزّع المجموعات وحدد زمنًا، ثم اطلب عرض مختصر لنتائجهم.</div>
+        
+        <div class="activity-card">
+          <h3>نموذج تقييم الـ Prompt</h3>
+          <div class="assessment-question">
+            <p>هل الـ Prompt محدد وواضح؟</p>
+            <div class="assessment-options">
+              <div class="assessment-option">ضعيف</div>
+              <div class="assessment-option">مقبول</div>
+              <div class="assessment-option">جيد</div>
+              <div class="assessment-option">ممتاز</div>
+            </div>
+          </div>
+          <div class="assessment-question">
+            <p>هل يحدد الـ Prompt الجمهور المستهدف؟</p>
+            <div class="assessment-options">
+              <div class="assessment-option">لا</div>
+              <div class="assessment-option">نعم</div>
+            </div>
+          </div>
+          <button id="saveAssessmentBtn" style="margin-top:8px">حفظ التقييم</button>
+        </div>
       </section>
 
       <!-- Slide 8 -->
       <section class="slide" id="slide-8" role="group" aria-labelledby="s8-title">
-        <h2 id="s8-title">الشريحة 8: تقييم وتغذية راجعة</h2>
+        <h2 id="s8-title">الشريحة 8: تقييم وتغذية راجعة
+          <span class="small">الوقت: 8 دقائق</span>
+        </h2>
+        <div class="timer" id="timer-8">
+          <span class="timer-icon">⏱️</span>
+          <span id="timer-text-8">08:00</span>
+        </div>
         <div class="meta">كيف نقيس أثر استخدام AI في الدروس؟</div>
         <ul>
           <li>تقويم قبلي وبعدي لقياس التعلم</li>
           <li>ملاحظات طلابية ومنسقية المعلمين</li>
           <li>مؤشرات زمنية واستدعائية للمحتوى</li>
         </ul>
-        <div class="speaker-notes" id="notes-8">اقترح أدوات قياس بسيطة يمكن تطبيقها فورًا.</div>
+        
+        <div class="activity-card">
+          <h3>نشاط: تصميم مقياس تقييم</h3>
+          <p>صمم مقياسًا بسيطًا (3 نقاط) لتقييم فعالية استخدام الذكاء الاصطناعي في درسك:</p>
+          <textarea id="evaluationMetric" rows="3" placeholder="اكتب مقاييس التقييم هنا..."></textarea>
+          <button id="saveMetricBtn" style="margin-top:8px">حفظ المقياس</button>
+        </div>
       </section>
 
       <!-- Slide 9 -->
       <section class="slide" id="slide-9" role="group" aria-labelledby="s9-title">
-        <h2 id="s9-title">الشريحة 9: أخلاقيات وخصوصية</h2>
+        <h2 id="s9-title">الشريحة 9: أخلاقيات وخصوصية
+          <span class="small">الوقت: 7 دقائق</span>
+        </h2>
+        <div class="timer" id="timer-9">
+          <span class="timer-icon">⏱️</span>
+          <span id="timer-text-9">07:00</span>
+        </div>
         <div class="meta">نقاط أساسية للتطبيق الآمن</div>
         <ul>
           <li>التحقق من المحتوى الناتج وعدم الاعتماد الكلي</li>
           <li>حماية بيانات الطلاب وعدم مشاركة معلومات حساسة</li>
           <li>الشفافية أمام الطلاب بشأن استخدام الأدوات</li>
         </ul>
-        <div class="speaker-notes" id="notes-9">ذكر سياسة خصوصية المؤسسة وكيفية الحصول على موافقات إن لزم.</div>
+        
+        <div class="activity-card">
+          <h3>تمرين: تحليل حالة</h3>
+          <p>معلم يستخدم أداة ذكاء اصطناعي لتصحيح أوراق الطلاب. ما هي الاعتبارات الأخلاقية التي يجب مراعاتها؟</p>
+          <textarea id="ethicalConsiderations" rows="3" placeholder="اكتب اعتباراتك الأخلاقية هنا..."></textarea>
+          <button id="saveEthicalBtn" style="margin-top:8px">حفظ الرد</button>
+        </div>
       </section>
 
       <!-- Slide 10 -->
       <section class="slide" id="slide-10" role="group" aria-labelledby="s10-title">
-        <h2 id="s10-title">الشريحة 10: خطة تطبيق عملية</h2>
+        <h2 id="s10-title">الشريحة 10: خطة تطبيق عملية
+          <span class="small">الوقت: 3 دقائق</span>
+        </h2>
+        <div class="timer" id="timer-10">
+          <span class="timer-icon">⏱️</span>
+          <span id="timer-text-10">03:00</span>
+        </div>
         <div class="meta">خطوات سريعة للتطبيق خلال 4 أسابيع</div>
         <ol>
           <li>تجربة أداة واحدة في درس تجريبي</li>
           <li>جمع ملاحظات المعلمين والطلاب</li>
           <li>تعديل الإجراءات والتوسع التجريبي</li>
         </ol>
-        <div class="speaker-notes" id="notes-10">اقترح إطار مسؤول عن التطبيق وجدول زمني موجز.</div>
+        
+        <div class="activity-card">
+          <h3>نشاط: خطة شخصية</h3>
+          <p>ما هي الخطوة الأولى التي ستتخذها لتطبيق الذكاء الاصطناعي في عملك التعليمي؟</p>
+          <textarea id="actionPlan" rows="2" placeholder="اكتب خطتك هنا..."></textarea>
+          <button id="savePlanBtn" style="margin-top:8px">حفظ الخطة</button>
+        </div>
       </section>
 
       <!-- Slide 11 -->
       <section class="slide" id="slide-11" role="group" aria-labelledby="s11-title">
-        <h2 id="s11-title">الشريحة 11: موارد وروابط مفيدة</h2>
+        <h2 id="s11-title">الشريحة 11: موارد وروابط مفيدة
+          <span class="small">الوقت: 2 دقائق</span>
+        </h2>
+        <div class="timer" id="timer-11">
+          <span class="timer-icon">⏱️</span>
+          <span id="timer-text-11">02:00</span>
+        </div>
         <div class="meta">قوائم مواد للتعمق</div>
         <ul>
           <li>دروس قصيرة حول كتابة Prompts</li>
           <li>قوالب أنشطة تفاعلية جاهزة</li>
           <li>مراجع حول أخلاقيات الذكاء الاصطناعي</li>
         </ul>
-        <div class="speaker-notes" id="notes-11">أضف روابط محلية أو منسقة حسب المؤسسة عند الاستخدام.</div>
+        
+        <div class="activity-card">
+          <h3>تنزيل المواد</h3>
+          <p>يمكنك تنزيل جميع المواد والأنشطة من هذه الدورة:</p>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button id="downloadMaterialsBtn">تنزيل المواد</button>
+            <button id="exportAllDataBtn" class="secondary">تصدير جميع البيانات</button>
+          </div>
+        </div>
       </section>
 
       <!-- Slide 12 -->
       <section class="slide" id="slide-12" role="group" aria-labelledby="s12-title">
-        <h2 id="s12-title">الشريحة 12: خلاصة وتقييم المشاركين</h2>
+        <h2 id="s12-title">الشريحة 12: خلاصة وتقييم المشاركين
+          <span class="small">الوقت: 2 دقائق</span>
+        </h2>
+        <div class="timer" id="timer-12">
+          <span class="timer-icon">⏱️</span>
+          <span id="timer-text-12">02:00</span>
+        </div>
         <div class="meta">خلاصة ونموذج سريع للتغذية الراجعة</div>
+        
+        <div class="self-assessment">
+          <h3>تقييم الذات</h3>
+          <div class="assessment-question">
+            <p>ما مدى استعدادك لتطبيق الذكاء الاصطناعي في عملك التعليمي بعد هذه الدورة؟</p>
+            <div class="assessment-options">
+              <div class="assessment-option">غير مستعد</div>
+              <div class="assessment-option">قليل الاستعداد</div>
+              <div class="assessment-option">مستعد</div>
+              <div class="assessment-option">مستعد جدًا</div>
+            </div>
+          </div>
+          <div class="assessment-question">
+            <p>ما هي أكثر نقطة استفدت منها في هذه الدورة؟</p>
+            <textarea id="keyTakeaway" rows="2" placeholder="اكتب أهم استفادة..."></textarea>
+          </div>
+        </div>
+        
         <p>اكتب تقييمًا موجزًا (3 نقاط إيجابية / 1 اقتراح تحسين):</p>
         <textarea id="feedbackInput" rows="3" placeholder="أدخل التغذية الراجعة هنا..." aria-label="تغذية راجعة"></textarea>
         <div class="slide-actions" style="margin-top:8px">
           <button id="saveFeedbackBtn">حفظ التغذية الراجعة</button>
           <button id="exportFeedbackBtn" class="secondary">تصدير CSV</button>
         </div>
-        <div class="speaker-notes" id="notes-12">اجمع التقييمات وناقش أهم نقاط التحسين مع الحضور إذا سمح الوقت.</div>
       </section>
 
     </div>
 
     <aside class="panel" aria-label="لوحة الأدوات">
       <div class="card" role="region" aria-labelledby="panel-title-1">
-        <div id="panel-title-1" class="small" style="font-weight:700;margin-bottom:6px">توقعات الحضور</div>
-        <input id="expectationInput" placeholder="أدخل توقع واحد ثم اضغط إضافة" aria-label="توقع" />
-        <div style="display:flex;gap:8px;margin-top:8px">
-          <button id="addExpectationBtn">إضافة</button>
-          <button id="clearExpectationsBtn" class="secondary">مسح الكل</button>
+        <div id="panel-title-1" class="small" style="font-weight:700;margin-bottom:6px">ساعة التوقيت</div>
+        <div id="globalTimer" class="timer" style="justify-content:center;font-weight:bold;font-size:1.1rem">
+          <span class="timer-icon">⏱️</span>
+          <span id="globalTimerText">90:00</span>
         </div>
-        <div class="output" id="expectationsList" aria-live="polite" style="margin-top:10px"></div>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button id="startTimerBtn">بدء التوقيت</button>
+          <button id="pauseTimerBtn" class="secondary">إيقاف</button>
+        </div>
       </div>
 
       <div class="card" role="region" aria-labelledby="panel-title-2">
@@ -302,6 +534,12 @@ function showSlide(idx, scroll = true){
   const pct = Math.round(((idx+1)/slideEls.length)*100);
   progressBar.style.width = pct + '%';
   progressBar.setAttribute('aria-valuenow', pct);
+  
+  // تحديث الجدول الزمني
+  document.querySelectorAll('.timeline-item').forEach((item, i) => {
+    item.classList.toggle('current', i === idx);
+  });
+  
   if(scroll) slideEls[idx].focus?.();
 }
 showSlide(0);
@@ -327,13 +565,80 @@ function toggleAllNotes(){
   notes.forEach(n => n.style.display = anyHidden ? 'block' : 'none');
 }
 
+/* ========= التوقيت الزمني ========= */
+let globalTimerInterval;
+let globalTimeRemaining = 90 * 60; // 90 دقيقة بالثواني
+let isTimerRunning = false;
+
+function updateGlobalTimer() {
+  if (!isTimerRunning) return;
+  
+  globalTimeRemaining--;
+  
+  if (globalTimeRemaining <= 0) {
+    globalTimeRemaining = 0;
+    clearInterval(globalTimerInterval);
+    document.getElementById('globalTimer').classList.add('time-up');
+    alert('انتهى وقت الدورة!');
+  }
+  
+  const minutes = Math.floor(globalTimeRemaining / 60);
+  const seconds = globalTimeRemaining % 60;
+  document.getElementById('globalTimerText').textContent = 
+    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+document.getElementById('startTimerBtn').addEventListener('click', () => {
+  if (!isTimerRunning) {
+    isTimerRunning = true;
+    globalTimerInterval = setInterval(updateGlobalTimer, 1000);
+  }
+});
+
+document.getElementById('pauseTimerBtn').addEventListener('click', () => {
+  isTimerRunning = false;
+  clearInterval(globalTimerInterval);
+});
+
+// تهيئة التوقيتات للشرائح الفردية
+slideEls.forEach((slide, index) => {
+  const timerText = document.getElementById(`timer-text-${index+1}`);
+  if (timerText) {
+    const timeStr = timerText.textContent;
+    const minutes = parseInt(timeStr.split(':')[0]);
+    timerText.dataset.seconds = minutes * 60;
+  }
+});
+
 /* ========= حالة الحفظ المحلية وإدارة البيانات ========= */
-const STORAGE_KEY = 'ai_course_trainer_v2';
+const STORAGE_KEY = 'ai_course_trainer_v3';
 function loadState(){
   try{
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : {expectations:[],prompts:[],feedback:[]};
-  }catch(e){ return {expectations:[],prompts:[],feedback:[]} }
+    return raw ? JSON.parse(raw) : {
+      expectations:[],
+      prompts:[],
+      feedback:[],
+      challenges:[],
+      assessments:[],
+      metrics:[],
+      ethical:[],
+      plans:[],
+      takeaways:[]
+    };
+  }catch(e){ 
+    return {
+      expectations:[],
+      prompts:[],
+      feedback:[],
+      challenges:[],
+      assessments:[],
+      metrics:[],
+      ethical:[],
+      plans:[],
+      takeaways:[]
+    };
+  }
 }
 function saveState(state){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 
@@ -373,9 +678,102 @@ document.getElementById('addExpectationBtn').addEventListener('click', ()=>{
   state.expectations.push(v); saveState(state); renderAllLists();
   document.getElementById('expectationInput').value = '';
 });
-document.getElementById('clearExpectationsBtn').addEventListener('click', ()=>{
-  if(!confirm('مسح كل التوقعات؟')) return;
-  state.expectations = []; saveState(state); renderAllLists();
+
+/* تحديات العمل التعليمي */
+document.getElementById('saveChallengeBtn')?.addEventListener('click', ()=>{
+  const v = document.getElementById('challengeInput').value.trim();
+  if(!v){ alert('أدخل التحدي.'); return; }
+  state.challenges = state.challenges || [];
+  state.challenges.push(v); saveState(state);
+  document.getElementById('challengeInput').value = '';
+  alert('تم حفظ التحدي.');
+});
+
+/* إنشاء أسئلة */
+document.getElementById('generateQuestionBtn')?.addEventListener('click', ()=>{
+  const topic = document.getElementById('contentTopic').value.trim();
+  if(!topic){ alert('أدخل موضوعًا.'); return; }
+  
+  const output = document.getElementById('generatedQuestion');
+  output.textContent = 'جارٍ إنشاء السؤال...';
+  
+  // محاكاة إنشاء سؤال
+  setTimeout(() => {
+    const questions = [
+      `سؤال حول ${topic}: ما هو العنصر الرئيسي في ${topic}؟\nأ) الخيار الأول\nب) الخيار الثاني\nج) الخيار الثالث\nد) الخيار الرابع`,
+      `سؤال تطبيقي في ${topic}: كيف يمكن تطبيق ${topic} في سياق تعليمي؟\nأ) الطريقة الأولى\nب) الطريقة الثانية\nج) الطريقة الثالثة\nد) الطريقة الرابعة`
+    ];
+    output.textContent = questions[Math.floor(Math.random() * questions.length)];
+  }, 1500);
+});
+
+/* تحسين الـ Prompt */
+document.getElementById('checkPromptBtn')?.addEventListener('click', ()=>{
+  document.getElementById('promptFeedback').style.display = 'block';
+});
+
+/* تحليل الحالة الأخلاقية */
+document.getElementById('saveEthicalBtn')?.addEventListener('click', ()=>{
+  const v = document.getElementById('ethicalConsiderations').value.trim();
+  if(!v){ alert('أدخل الاعتبارات الأخلاقية.'); return; }
+  state.ethical = state.ethical || [];
+  state.ethical.push(v); saveState(state);
+  document.getElementById('ethicalConsiderations').value = '';
+  alert('تم حفظ الرد.');
+});
+
+/* خطة التطبيق */
+document.getElementById('savePlanBtn')?.addEventListener('click', ()=>{
+  const v = document.getElementById('actionPlan').value.trim();
+  if(!v){ alert('أدخل خطتك.'); return; }
+  state.plans = state.plans || [];
+  state.plans.push(v); saveState(state);
+  document.getElementById('actionPlan').value = '';
+  alert('تم حفظ الخطة.');
+});
+
+/* مقياس التقييم */
+document.getElementById('saveMetricBtn')?.addEventListener('click', ()=>{
+  const v = document.getElementById('evaluationMetric').value.trim();
+  if(!v){ alert('أدخل المقياس.'); return; }
+  state.metrics = state.metrics || [];
+  state.metrics.push(v); saveState(state);
+  document.getElementById('evaluationMetric').value = '';
+  alert('تم حفظ المقياس.');
+});
+
+/* تفاعلات التقييم الذاتي */
+document.querySelectorAll('.assessment-option').forEach(option => {
+  option.addEventListener('click', function() {
+    // إزالة التحديد من جميع الخيارات في نفس المجموعة
+    const parent = this.closest('.assessment-options');
+    parent.querySelectorAll('.assessment-option').forEach(opt => {
+      opt.classList.remove('selected');
+    });
+    
+    // تحديد الخيار الحالي
+    this.classList.add('selected');
+  });
+});
+
+/* تفاعلات اختيارات الاختبار */
+document.querySelectorAll('.quiz-option').forEach(option => {
+  option.addEventListener('click', function() {
+    // إزالة التحديد من جميع الخيارات في نفس السؤال
+    const parent = this.parentElement;
+    parent.querySelectorAll('.quiz-option').forEach(opt => {
+      opt.classList.remove('selected');
+    });
+    
+    // تحديد الخيار الحالي
+    this.classList.add('selected');
+    
+    // عرض النتيجة
+    const result = parent.querySelector('.quiz-result');
+    if (result) {
+      result.style.display = 'block';
+    }
+  });
 });
 
 /* تحميل عينات Prompts معاينة */
@@ -419,6 +817,54 @@ document.getElementById('saveFeedbackBtn')?.addEventListener('click', ()=>{
   document.getElementById('feedbackInput').value = '';
   alert('تم حفظ التغذية الراجعة محليًا.');
 });
+
+/* حفظ التقييم الذاتي */
+document.getElementById('saveAssessmentBtn')?.addEventListener('click', ()=>{
+  const assessmentData = {
+    promptClarity: document.querySelectorAll('.assessment-option.selected')[0]?.textContent || 'غير محدد',
+    targetAudience: document.querySelectorAll('.assessment-option.selected')[1]?.textContent || 'غير محدد',
+    timestamp: new Date().toISOString()
+  };
+  
+  state.assessments = state.assessments || [];
+  state.assessments.push(assessmentData);
+  saveState(state);
+  alert('تم حفظ التقييم.');
+});
+
+/* حفظ الاستفادة الرئيسية */
+document.getElementById('keyTakeaway')?.addEventListener('blur', ()=>{
+  const v = document.getElementById('keyTakeaway').value.trim();
+  if(v){
+    state.takeaways = state.takeaways || [];
+    state.takeaways.push(v);
+    saveState(state);
+  }
+});
+
+/* تصدير CSV */
+function exportAsCSV(data, filename) {
+  let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+  if (Array.isArray(data)) {
+    data.forEach(item => {
+      csvContent += '"' + item.replace(/"/g, '""') + '"\n';
+    });
+  } else {
+    // إذا كانت البيانات كائن، نقوم بتحويلها
+    const headers = Object.keys(data).join(',');
+    const values = Object.values(data).join(',');
+    csvContent += headers + '\n' + values + '\n';
+  }
+  
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", filename);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
 document.getElementById('exportFeedbackBtn')?.addEventListener('click', ()=>{
   if(!(state.feedback && state.feedback.length)){ alert('لا توجد تغذية راجعة للتصدير.'); return; }
   exportAsCSV(state.feedback, 'feedback.csv');
@@ -429,80 +875,73 @@ document.getElementById('exportAllBtn').addEventListener('click', ()=>{
   const payload = JSON.stringify(state, null, 2);
   const blob = new Blob([payload], {type:'application/json;charset=utf-8'});
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href = url; a.download = 'ai_course_state.json'; document.body.appendChild(a); a.click(); a.remove();
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'ai_course_data.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
   URL.revokeObjectURL(url);
 });
 
-/* تنزيل نسخة واستعادة */
+/* تنزيل المواد */
+document.getElementById('downloadMaterialsBtn').addEventListener('click', ()=>{
+  const materials = [
+    "دليل كتابة Prompts الفعالة",
+    "قائمة بأدوات الذكاء الاصطناعي التعليمية",
+    "نموذج خطة تطبيق الذكاء الاصطناعي",
+    "دليل الأخلاقيات والخصوصية"
+  ].join('\n');
+  
+  const blob = new Blob([materials], {type: 'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'مواد_دورة_الذكاء_الاصطناعي.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+
+/* استعادة البيانات من ملف */
+document.getElementById('restoreStateBtn').addEventListener('click', ()=>{
+  document.getElementById('restoreFileInput').click();
+});
+
+document.getElementById('restoreFileInput').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const newState = JSON.parse(e.target.result);
+      state = newState;
+      saveState(state);
+      renderAllLists();
+      alert('تم استعادة البيانات بنجاح!');
+    } catch (err) {
+      alert('خطأ في تحميل الملف. تأكد من صيغة الملف.');
+    }
+  };
+  reader.readAsText(file);
+  this.value = ''; // إعادة تعيين قيمة الإدخال
+});
+
+/* تنزيل حالة التطبيق */
 document.getElementById('downloadStateBtn').addEventListener('click', ()=>{
   const payload = JSON.stringify(state, null, 2);
   const blob = new Blob([payload], {type:'application/json;charset=utf-8'});
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href = url; a.download = 'ai_course_state.json'; document.body.appendChild(a); a.click(); a.remove();
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'ai_course_backup.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
   URL.revokeObjectURL(url);
 });
-document.getElementById('restoreStateBtn').addEventListener('click', ()=>{
-  document.getElementById('restoreFileInput').click();
-});
-document.getElementById('restoreFileInput').addEventListener('change', (e)=>{
-  const f = e.target.files[0];
-  if(!f) return;
-  const reader = new FileReader();
-  reader.onload = () => {
-    try{
-      const parsed = JSON.parse(reader.result);
-      if(confirm('استبدال الحالة الحالية بالبيانات المستوردة؟')){ state = parsed; saveState(state); renderAllLists(); alert('تم الاستيراد.'); }
-    }catch(err){ alert('فشل تحميل الملف: تأكد أنه ملف JSON صالح.'); }
-  };
-  reader.readAsText(f, 'utf8');
-});
-
-/* تنزيل CSV مساعدة */
-function exportAsCSV(rows, name){
-  const csv = rows.map(r => '"' + String(r).replace(/"/g,'""') + '"').join('\n');
-  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
-  URL.revokeObjectURL(url);
-}
-document.getElementById('exportPromptsBtn').addEventListener('click', ()=>{
-  const content = state.prompts && state.prompts.length ? state.prompts : (document.getElementById('promptSamples').value ? [document.getElementById('promptSamples').value] : []);
-  if(!content.length){ alert('لا توجد Prompts للتصدير.'); return; }
-  exportAsCSV(content, 'prompts.csv');
-});
-
-/* زر تنزيل / نسخ سريع للملحوظة الناتجة من المحاكاة */
-document.getElementById('promptOutput')?.addEventListener('click', (e)=>{
-  const text = e.target.textContent || '';
-  if(!text) return;
-  navigator.clipboard?.writeText(text).then(()=> { alert('تم نسخ النص المحاكى إلى الحافظة.'); }, ()=>{/* ignore */});
-});
-
-/* تجنب فقدان غير مقصود */
-window.addEventListener('beforeunload', (e)=>{
-  // حفظ تلقائي
-  saveState(state);
-});
-
-/* Accessibility: focus trap على الشريحة المرئية عند الضغط على Tab ينقل داخلها */
-document.addEventListener('keydown', (e) => {
-  if(e.key === 'Tab'){
-    // لا نعطل السلوك الطبيعي هنا — عناصر التركيز هي عناصر HTML الاعتيادية داخل الشريحة.
-  }
-});
-
-/* تحسين الأداء: تعيين tabindex للشرائح لتسهيل التركيز */
-slideEls.forEach(s => s.setAttribute('tabindex','-1'));
-
-/* تنفيذ سريع: ملء الـ prompt samples من الحالة إن وجدت */
-if(state.prompts && state.prompts.length && document.getElementById('promptSamples')){
-  document.getElementById('promptSamples').value = state.prompts.slice(-5).join("\n");
-}
-
-/* تحميل أي ملاحظات مخفية افتراضياً: إخفاء الملاحظات عند البدء */
-document.querySelectorAll('.speaker-notes').forEach(n => n.style.display = 'none');
-
 </script>
-
 </body>
 </html>
