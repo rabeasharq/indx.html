@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>دورة: الذكاء الاصطناعي في التعليم — نموذج تفاعلي نهائي للمدرّب</title>
+<meta name="description" content="قالب تفاعلي ومطوي للطباعة لمدرّبي دورة الذكاء الاصطناعي في التعليم. حفظ محلي، تصدير، وصول محسن، ملاحظات المتحدث وورقة للطباعة." />
+<style>
+:root{
+  --bg1:#f6fbff; --card:#ffffff; --accent:#0b5ea8; --accent-2:#0a75c2;
+  --muted:#4a6b86; --radius:12px; --text:#0b2540;
+  --print-edge:8mm;
+  --maxw:1100px;
+  --slide-padding:20px;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:"Noto Naskh Arabic","Segoe UI",Arial,Helvetica,sans-serif;background:linear-gradient(180deg,var(--bg1),#eaf6ff);color:var(--text);-webkit-font-smoothing:antialiased}
+header{padding:18px 16px;text-align:center}
+header h1{margin:0;font-size:1.45rem;font-weight:700}
+header p{margin:6px 0 0;color:var(--muted);font-size:0.98rem}
+main{max-width:var(--maxw);margin:16px auto;padding:0 16px 48px}
+.container{display:flex;gap:18px;align-items:flex-start;justify-content:space-between}
+.slides{flex:1 min-width:320px;position:relative}
+.slide{
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:var(--slide-padding);
+  box-shadow:0 8px 20px rgba(13,47,81,0.08);
+  opacity:0; transform:translateY(20px);
+  transition:opacity .5s ease, transform .5s ease;
+  position:absolute; inset:0; pointer-events:none; overflow:auto;
+}
+.slide.visible{opacity:1; transform:none; pointer-events:auto; position:relative}
+.slide h2{margin:0 0 8px; font-size:1.14rem; display:flex;align-items:center;justify-content:space-between;gap:10px}
+.meta{color:var(--muted);font-size:0.95rem;margin-bottom:10px}
+.controls{position:fixed;left:16px;bottom:18px;display:flex;gap:8px;z-index:80}
+.controls button{background:var(--accent);color:#fff;border:none;padding:9px 12px;border-radius:8px;cursor:pointer;box-shadow:0 6px 18px rgba(11,94,168,0.12)}
+.controls button.secondary{background:transparent;color:var(--accent);border:1px solid rgba(11,94,168,0.14)}
+.progress{height:8px;background:rgba(0,0,0,0.05);border-radius:10px;margin-top:12px;overflow:hidden}
+.progress>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));width:0%;transition:width .35s ease}
+.panel{width:320px;min-width:240px}
+.panel .card{background:var(--card);padding:12px;border-radius:12px;box-shadow:0 8px 18px rgba(13,47,81,0.05);margin-bottom:12px}
+textarea,input,select{width:100%;padding:8px;border-radius:8px;border:1px solid rgba(11,94,168,0.08);font-size:14px;background:#fff}
+.small{font-size:0.95rem;color:var(--muted)}
+.slide-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.note{font-size:0.95rem;background:#fff8e6;padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.03);margin-top:10px}
+.speaker-notes{display:none;background:#fff;border-left:4px solid var(--accent);padding:10px;margin-top:10px;border-radius:6px}
+.output{background:#e9f5ff;padding:10px;margin-top:10px;border-radius:8px;max-height:180px;overflow:auto}
+.actions-inline{display:flex;gap:8px;align-items:center}
+.footer{max-width:var(--maxw);margin:18px auto 48px;padding:0 16px;color:var(--muted);text-align:center;font-size:0.95rem}
+
+/* table for handout / print-friendly */
+.handout{border-collapse:collapse;width:100%;margin-top:8px}
+.handout th,.handout td{border:1px solid #d7e9fb;padding:6px 8px;text-align:right;font-size:13px}
+.handout th{background:#f0f7ff;color:var(--accent);font-weight:700}
+
+/* responsive */
+@media (max-width:980px){.container{flex-direction:column}.panel{width:100%}}
+/* keyboard focus */
+:focus{outline:3px solid rgba(10,117,194,0.14);outline-offset:2px}
+
+/* print rules: simple, no background, compact */
+@media print{
+  body{background:none;color:#000}
+  .controls,.panel,footer,header{display:none}
+  .slide{position:relative;box-shadow:none;border-radius:0;margin:0;padding:10mm;page-break-after:always;background:transparent}
+  @page{size:A4;margin:var(--print-edge)}
+  .speaker-notes{display:block;border-left:4px solid #000}
+}
+</style>
+</head>
+<body>
+
+<header role="banner" aria-label="مقدمة الدورة">
+  <h1>دورة: الذكاء الاصطناعي في التعليم — نموذج تفاعلي للمدرّب</h1>
+  <p>مدة مقترحة: 90 دقيقة — دمج عرض ونشاط وتطبيق عملي. يوفر هذا القالب حفظًا محليًا، تصديرًا، وطباعة ميسّرة.</p>
+</header>
+
+<main>
+  <div class="container" role="main">
+    <div class="slides" id="slides" aria-live="polite">
+
+      <!-- Slide 1 -->
+      <section class="slide" id="slide-1" role="group" aria-labelledby="s1-title">
+        <h2 id="s1-title">الشريحة 1: الترحيب والأهداف
+          <span class="small">الوقت: 5 دقائق</span>
+        </h2>
+        <div class="meta">أهداف الجلسة</div>
+        <ul>
+          <li>فهم مفهوم الذكاء الاصطناعي وتطبيقاته التعليمية.</li>
+          <li>استعراض أدوات عملية لصنع محتوى تعليمي تفاعلي.</li>
+          <li>التدرّب على كتابة Prompts فعّالة.</li>
+        </ul>
+        <div class="speaker-notes" id="notes-1">نقطة للمدرّب: قدم نفسك واطلب من المشاركين ذكر توقع واحد قبل البدء.</div>
+      </section>
+
+      <!-- Slide 2 -->
+      <section class="slide" id="slide-2" role="group" aria-labelledby="s2-title">
+        <h2 id="s2-title">الشريحة 2: جدول الأعمال
+          <span class="small">الوقت: 2 دقائق</span>
+        </h2>
+        <div class="meta">نظرة سريعة على تقسيم الجلسة</div>
+        <ol>
+          <li>مقدمة ونظري (20 د)</li>
+          <li>أدوات وتجارب عملية (30 د)</li>
+          <li>نشاط مجموعات / كتابة Prompts (25 د)</li>
+          <li>مراجعة وخلاصة (15 د)</li>
+        </ol>
+        <div class="speaker-notes" id="notes-2">أشر للزمن وشجع الالتزام بالمواعيد أثناء الأنشطة.</div>
+      </section>
+
+      <!-- Slide 3 -->
+      <section class="slide" id="slide-3" role="group" aria-labelledby="s3-title">
+        <h2 id="s3-title">الشريحة 3: ما هو الذكاء الاصطناعي؟
+          <span class="small">مفهوم مبسّط</span>
+        </h2>
+        <div class="meta">تعريف عملي</div>
+        <p>الذكاء الاصطناعي تقنيات تنتج مخرجات تشبه القرارات البشرية عبر نماذج مبنية على بيانات وتعلم آلي.</p>
+        <div class="speaker-notes" id="notes-3">أمثلة بسيطة: اقتراحات المحتوى، تحليل النصوص، إنشاء أسئلة تلقائية.</div>
+      </section>
+
+      <!-- Slide 4 -->
+      <section class="slide" id="slide-4" role="group" aria-labelledby="s4-title">
+        <h2 id="s4-title">الشريحة 4: حالات استخدام في التعليم
+          <span class="small">نماذج واقعية</span>
+        </h2>
+        <ul>
+          <li>تصميم خطط دروس مُخصّصة</li>
+          <li>توليد أسئلة تقييمية وتقارير مختصرة</li>
+          <li>دعم التعلّم الذاتي والتوجيه الذكي</li>
+        </ul>
+        <div class="speaker-notes" id="notes-4">اطرح مثالًا من واقع المدرسة أو المؤسسة لتقريب الفكرة.</div>
+      </section>
+
+      <!-- Slide 5 -->
+      <section class="slide" id="slide-5" role="group" aria-labelledby="s5-title">
+        <h2 id="s5-title">الشريحة 5: أدوات مُقترحة</h2>
+        <div class="meta">أدوات آمنة ومفيدة</div>
+        <ul>
+          <li>منصات إنشاء محتوى (نماذج توليد الأسئلة، ملخصات الدروس)</li>
+          <li>أدوات تحويل النص إلى عرض تقديمي/أنشطة</li>
+          <li>أدوات فحص الأصالة والتقويم التكويني</li>
+        </ul>
+        <div class="speaker-notes" id="notes-5">اشرح مزايا كل أداة وكيفية قياس المخاطر والخصوصية.</div>
+      </section>
+
+      <!-- Slide 6 -->
+      <section class="slide" id="slide-6" role="group" aria-labelledby="s6-title">
+        <h2 id="s6-title">الشريحة 6: كتابة Prompts فعّالة</h2>
+        <div class="meta">قواعد بسيطة</div>
+        <ul>
+          <li>كن واضحاً ومحدداً في المطلوب</li>
+          <li>حدّد مستوى الطالب والناتج المتوقع</li>
+          <li>اطلب أمثلة، تنسيقات، وقياسات الأداء</li>
+        </ul>
+        <div class="speaker-notes" id="notes-6">أعطِ مثالاً سيئًا ثم حسّنه أمام المشاركين.</div>
+      </section>
+
+      <!-- Slide 7 -->
+      <section class="slide" id="slide-7" role="group" aria-labelledby="s7-title">
+        <h2 id="s7-title">الشريحة 7: نشاط عملي — كتابة Prompt</h2>
+        <div class="meta">25 دقيقة — مجموعات صغيرة</div>
+        <p>مهمة: صغ Prompt يطلب من النموذج توليد 5 أسئلة قصيرة متعددة الاختيارات مع إجابات مختصرة حول موضوع تختارونه.</p>
+
+        <div style="margin-top:8px" class="slide-actions">
+          <input id="promptInput" placeholder="اكتب هنا Prompt نموذجي للمجموعة..." aria-label="مدخل الـ Prompt" />
+          <button id="simulateBtn">محاكاة إجابة</button>
+        </div>
+        <div class="output" id="promptOutput" aria-live="polite"></div>
+        <div class="speaker-notes" id="notes-7">وزّع المجموعات وحدد زمنًا، ثم اطلب عرض مختصر لنتائجهم.</div>
+      </section>
+
+      <!-- Slide 8 -->
+      <section class="slide" id="slide-8" role="group" aria-labelledby="s8-title">
+        <h2 id="s8-title">الشريحة 8: تقييم وتغذية راجعة</h2>
+        <div class="meta">كيف نقيس أثر استخدام AI في الدروس؟</div>
+        <ul>
+          <li>تقويم قبلي وبعدي لقياس التعلم</li>
+          <li>ملاحظات طلابية ومنسقية المعلمين</li>
+          <li>مؤشرات زمنية واستدعائية للمحتوى</li>
+        </ul>
+        <div class="speaker-notes" id="notes-8">اقترح أدوات قياس بسيطة يمكن تطبيقها فورًا.</div>
+      </section>
+
+      <!-- Slide 9 -->
+      <section class="slide" id="slide-9" role="group" aria-labelledby="s9-title">
+        <h2 id="s9-title">الشريحة 9: أخلاقيات وخصوصية</h2>
+        <div class="meta">نقاط أساسية للتطبيق الآمن</div>
+        <ul>
+          <li>التحقق من المحتوى الناتج وعدم الاعتماد الكلي</li>
+          <li>حماية بيانات الطلاب وعدم مشاركة معلومات حساسة</li>
+          <li>الشفافية أمام الطلاب بشأن استخدام الأدوات</li>
+        </ul>
+        <div class="speaker-notes" id="notes-9">ذكر سياسة خصوصية المؤسسة وكيفية الحصول على موافقات إن لزم.</div>
+      </section>
+
+      <!-- Slide 10 -->
+      <section class="slide" id="slide-10" role="group" aria-labelledby="s10-title">
+        <h2 id="s10-title">الشريحة 10: خطة تطبيق عملية</h2>
+        <div class="meta">خطوات سريعة للتطبيق خلال 4 أسابيع</div>
+        <ol>
+          <li>تجربة أداة واحدة في درس تجريبي</li>
+          <li>جمع ملاحظات المعلمين والطلاب</li>
+          <li>تعديل الإجراءات والتوسع التجريبي</li>
+        </ol>
+        <div class="speaker-notes" id="notes-10">اقترح إطار مسؤول عن التطبيق وجدول زمني موجز.</div>
+      </section>
+
+      <!-- Slide 11 -->
+      <section class="slide" id="slide-11" role="group" aria-labelledby="s11-title">
+        <h2 id="s11-title">الشريحة 11: موارد وروابط مفيدة</h2>
+        <div class="meta">قوائم مواد للتعمق</div>
+        <ul>
+          <li>دروس قصيرة حول كتابة Prompts</li>
+          <li>قوالب أنشطة تفاعلية جاهزة</li>
+          <li>مراجع حول أخلاقيات الذكاء الاصطناعي</li>
+        </ul>
+        <div class="speaker-notes" id="notes-11">أضف روابط محلية أو منسقة حسب المؤسسة عند الاستخدام.</div>
+      </section>
+
+      <!-- Slide 12 -->
+      <section class="slide" id="slide-12" role="group" aria-labelledby="s12-title">
+        <h2 id="s12-title">الشريحة 12: خلاصة وتقييم المشاركين</h2>
+        <div class="meta">خلاصة ونموذج سريع للتغذية الراجعة</div>
+        <p>اكتب تقييمًا موجزًا (3 نقاط إيجابية / 1 اقتراح تحسين):</p>
+        <textarea id="feedbackInput" rows="3" placeholder="أدخل التغذية الراجعة هنا..." aria-label="تغذية راجعة"></textarea>
+        <div class="slide-actions" style="margin-top:8px">
+          <button id="saveFeedbackBtn">حفظ التغذية الراجعة</button>
+          <button id="exportFeedbackBtn" class="secondary">تصدير CSV</button>
+        </div>
+        <div class="speaker-notes" id="notes-12">اجمع التقييمات وناقش أهم نقاط التحسين مع الحضور إذا سمح الوقت.</div>
+      </section>
+
+    </div>
+
+    <aside class="panel" aria-label="لوحة الأدوات">
+      <div class="card" role="region" aria-labelledby="panel-title-1">
+        <div id="panel-title-1" class="small" style="font-weight:700;margin-bottom:6px">توقعات الحضور</div>
+        <input id="expectationInput" placeholder="أدخل توقع واحد ثم اضغط إضافة" aria-label="توقع" />
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button id="addExpectationBtn">إضافة</button>
+          <button id="clearExpectationsBtn" class="secondary">مسح الكل</button>
+        </div>
+        <div class="output" id="expectationsList" aria-live="polite" style="margin-top:10px"></div>
+      </div>
+
+      <div class="card" role="region" aria-labelledby="panel-title-2">
+        <div id="panel-title-2" class="small" style="font-weight:700;margin-bottom:6px">أمثلة Prompts سريعة</div>
+        <textarea id="promptSamples" rows="4" placeholder="ضع أمثلة مختصرة مفيدة هنا..."></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button id="loadSamplesBtn" class="secondary">تحميل عينات</button>
+          <button id="exportPromptsBtn">تصدير CSV</button>
+        </div>
+      </div>
+
+      <div class="card" role="region" aria-labelledby="panel-title-3">
+        <div id="panel-title-3" class="small" style="font-weight:700;margin-bottom:6px">إجراءات عامة</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div class="actions-inline">
+            <button id="prevBtn" class="secondary">السابق</button>
+            <button id="nextBtn">التالي</button>
+            <button id="toggleNotesBtn" class="secondary">ملاحظات</button>
+          </div>
+          <div class="actions-inline">
+            <button id="printBtn" class="secondary">طباعة</button>
+            <button id="exportAllBtn" class="secondary">تصدير كل البيانات</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" role="region" aria-labelledby="panel-title-4">
+        <div id="panel-title-4" class="small" style="font-weight:700;margin-bottom:6px">حفظ محلي وتصدير</div>
+        <div class="small">البيانات تحفظ محليًا تلقائيًا (المتصفح).</div>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button id="downloadStateBtn" class="secondary">تنزيل نسخة</button>
+          <button id="restoreStateBtn" class="secondary">استعادة من ملف</button>
+        </div>
+        <input id="restoreFileInput" type="file" accept="application/json" style="display:none" aria-hidden="true" />
+      </div>
+
+    </aside>
+  </div>
+
+  <div class="progress" aria-hidden="false" style="max-width:var(--maxw);margin:12px auto">
+    <i id="progressBar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:0%"></i>
+  </div>
+</main>
+
+<footer class="footer" role="contentinfo">اختصارات: ← السابق، → التالي، N تبديل الملاحظات، P طباعة — الحفظ محليًا في المتصفح.</footer>
+
+<script>
+/* ========= إعداد الشرائح والتنقّل ========= */
+const slideEls = Array.from(document.querySelectorAll('.slide'));
+const progressBar = document.getElementById('progressBar');
+let current = 0;
+
+function showSlide(idx, scroll = true){
+  if(idx < 0) idx = 0;
+  if(idx >= slideEls.length) idx = slideEls.length - 1;
+  current = idx;
+  slideEls.forEach((el,i)=> el.classList.toggle('visible', i === idx));
+  const pct = Math.round(((idx+1)/slideEls.length)*100);
+  progressBar.style.width = pct + '%';
+  progressBar.setAttribute('aria-valuenow', pct);
+  if(scroll) slideEls[idx].focus?.();
+}
+showSlide(0);
+
+/* controls */
+document.getElementById('nextBtn').addEventListener('click', ()=> showSlide(current+1));
+document.getElementById('prevBtn').addEventListener('click', ()=> showSlide(current-1));
+document.getElementById('printBtn').addEventListener('click', ()=> window.print());
+document.getElementById('toggleNotesBtn').addEventListener('click', toggleAllNotes);
+
+/* keyboard shortcuts */
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight') showSlide(current+1);
+  if (e.key === 'ArrowLeft') showSlide(current-1);
+  if (e.key.toLowerCase() === 'n') toggleAllNotes();
+  if (e.key.toLowerCase() === 'p') window.print();
+});
+
+/* toggle speaker notes globally */
+function toggleAllNotes(){
+  const notes = document.querySelectorAll('.speaker-notes');
+  const anyHidden = Array.from(notes).some(n => getComputedStyle(n).display === 'none');
+  notes.forEach(n => n.style.display = anyHidden ? 'block' : 'none');
+}
+
+/* ========= حالة الحفظ المحلية وإدارة البيانات ========= */
+const STORAGE_KEY = 'ai_course_trainer_v2';
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {expectations:[],prompts:[],feedback:[]};
+  }catch(e){ return {expectations:[],prompts:[],feedback:[]} }
+}
+function saveState(state){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+let state = loadState();
+renderAllLists();
+
+function renderList(elId, arr){
+  const el = document.getElementById(elId);
+  if(!el) return;
+  el.innerHTML = '';
+  if(!arr.length){ el.textContent = 'لا توجد عناصر حالياً.'; return; }
+  arr.forEach((v, idx) => {
+    const p = document.createElement('div');
+    p.style.display = 'flex';
+    p.style.justifyContent = 'space-between';
+    p.style.alignItems = 'center';
+    p.style.gap = '8px';
+    p.style.marginBottom = '6px';
+    const t = document.createElement('div'); t.textContent = '• ' + v; t.style.flex = '1';
+    const del = document.createElement('button'); del.className = 'secondary'; del.textContent = 'حذف';
+    del.style.fontSize = '12px';
+    del.addEventListener('click', () => {
+      state.expectations.splice(idx,1); saveState(state); renderAllLists();
+    });
+    p.appendChild(t); p.appendChild(del);
+    el.appendChild(p);
+  });
+}
+function renderAllLists(){
+  renderList('expectationsList', state.expectations);
+}
+
+/* توقعات الحضور: إضافة ومسح */
+document.getElementById('addExpectationBtn').addEventListener('click', ()=>{
+  const v = document.getElementById('expectationInput').value.trim();
+  if(!v){ alert('أدخل نصًا للتوقع.'); return; }
+  state.expectations.push(v); saveState(state); renderAllLists();
+  document.getElementById('expectationInput').value = '';
+});
+document.getElementById('clearExpectationsBtn').addEventListener('click', ()=>{
+  if(!confirm('مسح كل التوقعات؟')) return;
+  state.expectations = []; saveState(state); renderAllLists();
+});
+
+/* تحميل عينات Prompts معاينة */
+document.getElementById('loadSamplesBtn').addEventListener('click', ()=>{
+  const samples = [
+    'اكتب 5 أسئلة اختيار من متعدد عن دورة الماء مع إجابات مختصرة.',
+    'لخّص درس الثورة الصناعية في 5 نقاط بسيطة لطلاب المرحلة المتوسطة.',
+    'اصنع نشاطًا تفاعليًا لتعلّم جدول الضرب مع حل لكل سؤال.'
+  ];
+  state.prompts = (state.prompts || []).concat(samples);
+  saveState(state);
+  alert('تم إضافة عينات Prompts للمخزن المحلي.');
+});
+
+/* محاكاة الإجابة على الـPrompt (نموذج محاكاة بسيطة محليًا) */
+document.getElementById('simulateBtn')?.addEventListener('click', ()=>{
+  const v = document.getElementById('promptInput').value.trim();
+  if(!v){ alert('أدخل Prompt للمحاكاة.'); return; }
+  const out = document.getElementById('promptOutput');
+  // محاكاة بسيطة: نعيد صياغة الطلب مع بنية إجابة
+  const simulated = [
+    'محاكاة استجابة لنموذج: "'+v+'"',
+    '- سؤال 1: ...',
+    '- سؤال 2: ...',
+    '- سؤال 3: ...',
+    '- إجابات مختصرة مرفقة'
+  ].join('\n');
+  // عرض
+  out.textContent = simulated;
+  state.prompts = state.prompts || [];
+  state.prompts.push(v);
+  saveState(state);
+});
+
+/* حفظ التغذية الراجعة وتصديرها */
+document.getElementById('saveFeedbackBtn')?.addEventListener('click', ()=>{
+  const v = document.getElementById('feedbackInput').value.trim();
+  if(!v){ alert('أدخل التغذية الراجعة قبل الحفظ.'); return; }
+  state.feedback = state.feedback || [];
+  state.feedback.push(v); saveState(state);
+  document.getElementById('feedbackInput').value = '';
+  alert('تم حفظ التغذية الراجعة محليًا.');
+});
+document.getElementById('exportFeedbackBtn')?.addEventListener('click', ()=>{
+  if(!(state.feedback && state.feedback.length)){ alert('لا توجد تغذية راجعة للتصدير.'); return; }
+  exportAsCSV(state.feedback, 'feedback.csv');
+});
+
+/* تصدير عام للبيانات */
+document.getElementById('exportAllBtn').addEventListener('click', ()=>{
+  const payload = JSON.stringify(state, null, 2);
+  const blob = new Blob([payload], {type:'application/json;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'ai_course_state.json'; document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+});
+
+/* تنزيل نسخة واستعادة */
+document.getElementById('downloadStateBtn').addEventListener('click', ()=>{
+  const payload = JSON.stringify(state, null, 2);
+  const blob = new Blob([payload], {type:'application/json;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'ai_course_state.json'; document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+});
+document.getElementById('restoreStateBtn').addEventListener('click', ()=>{
+  document.getElementById('restoreFileInput').click();
+});
+document.getElementById('restoreFileInput').addEventListener('change', (e)=>{
+  const f = e.target.files[0];
+  if(!f) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try{
+      const parsed = JSON.parse(reader.result);
+      if(confirm('استبدال الحالة الحالية بالبيانات المستوردة؟')){ state = parsed; saveState(state); renderAllLists(); alert('تم الاستيراد.'); }
+    }catch(err){ alert('فشل تحميل الملف: تأكد أنه ملف JSON صالح.'); }
+  };
+  reader.readAsText(f, 'utf8');
+});
+
+/* تنزيل CSV مساعدة */
+function exportAsCSV(rows, name){
+  const csv = rows.map(r => '"' + String(r).replace(/"/g,'""') + '"').join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+}
+document.getElementById('exportPromptsBtn').addEventListener('click', ()=>{
+  const content = state.prompts && state.prompts.length ? state.prompts : (document.getElementById('promptSamples').value ? [document.getElementById('promptSamples').value] : []);
+  if(!content.length){ alert('لا توجد Prompts للتصدير.'); return; }
+  exportAsCSV(content, 'prompts.csv');
+});
+
+/* زر تنزيل / نسخ سريع للملحوظة الناتجة من المحاكاة */
+document.getElementById('promptOutput')?.addEventListener('click', (e)=>{
+  const text = e.target.textContent || '';
+  if(!text) return;
+  navigator.clipboard?.writeText(text).then(()=> { alert('تم نسخ النص المحاكى إلى الحافظة.'); }, ()=>{/* ignore */});
+});
+
+/* تجنب فقدان غير مقصود */
+window.addEventListener('beforeunload', (e)=>{
+  // حفظ تلقائي
+  saveState(state);
+});
+
+/* Accessibility: focus trap على الشريحة المرئية عند الضغط على Tab ينقل داخلها */
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'Tab'){
+    // لا نعطل السلوك الطبيعي هنا — عناصر التركيز هي عناصر HTML الاعتيادية داخل الشريحة.
+  }
+});
+
+/* تحسين الأداء: تعيين tabindex للشرائح لتسهيل التركيز */
+slideEls.forEach(s => s.setAttribute('tabindex','-1'));
+
+/* تنفيذ سريع: ملء الـ prompt samples من الحالة إن وجدت */
+if(state.prompts && state.prompts.length && document.getElementById('promptSamples')){
+  document.getElementById('promptSamples').value = state.prompts.slice(-5).join("\n");
+}
+
+/* تحميل أي ملاحظات مخفية افتراضياً: إخفاء الملاحظات عند البدء */
+document.querySelectorAll('.speaker-notes').forEach(n => n.style.display = 'none');
+
+</script>
+
+</body>
+</html>
