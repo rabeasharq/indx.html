@@ -1,720 +1,1493 @@
-<!doctype html>
+        <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>دورة الذكاء الاصطناعي في التعليم | إبراهيم متاش - مدارس إشراق اليمن</title>
-<meta name="description" content="دورة تفاعلية حول الذكاء الاصطناعي في التعليم للمدربين والمعلمين - تقديم إبراهيم متاش، مدارس إشراق اليمن">
-<style>
-:root{
-  --bg1:#f6fbff; --card:#ffffff;
-  --accent:#1d7dbf; --accent-2:#0087b2;
-  --muted:#576e8c; --radius:14px; --text:#0b2540;
-  --print-edge:10mm; --maxw:1140px; --slide-padding:24px;
-}
-html,body{height:100%;margin:0;font-family:"Noto Naskh Arabic", "Cairo", "Segoe UI", Arial, Helvetica,sans-serif;background:linear-gradient(180deg,var(--bg1),#eaf6ff);color:var(--text);}
-header{background:linear-gradient(90deg,var(--accent),var(--accent-2));padding:20px 0 26px 0;color:white;text-align:center;border-bottom-left-radius: 28px; box-shadow: 0 8px 32px #18538022;}
-header h1{margin:0 0 10px 0;font-size:2.3rem;font-weight:bold;letter-spacing:-1px}
-header h2{margin:0 0 3px 0;font-size:1.2rem;font-weight:400;letter-spacing:.5px}
-header .trainer-info{font-size:1.01rem;opacity:.97;margin-top:7px;}
-main{max-width:var(--maxw);margin:16px auto;padding:0 16px 54px}
-.container{display:flex;gap:20px;align-items:flex-start;justify-content:space-between}
-.slides{flex:1;min-width:330px;position:relative}
-.slide{
-  background:var(--card);
-  border-radius:var(--radius);
-  padding:var(--slide-padding);
-  box-shadow:0 8px 34px rgba(20,47,81,0.09);
-  opacity:0; transform:translateY(26px);
-  transition:opacity .5s,transform .5s;
-  position:absolute; inset:0; pointer-events:none; overflow:auto; min-height:460px;
-}
-.slide.visible{opacity:1; transform:none; pointer-events:auto; position:relative}
-.slide h2{margin:0 0 12px;font-size:1.27rem;font-weight:700;color:var(--accent);letter-spacing:-.3px;display:flex;align-items:center;justify-content:space-between;}
-.meta{color:var(--muted);font-size:0.98rem;margin-bottom:13px}
-.controls{position:fixed;left:16px;bottom:20px;display:flex;gap:10px;z-index:80}
-.controls button{background:var(--accent);color:#fff;border:none;padding:10px 14px;border-radius:9px;cursor:pointer;box-shadow:0 5px 15px rgba(30,130,210,0.12);font-size:1rem;font-weight:600}
-.controls button.secondary{background:transparent;color:var(--accent);border:1.5px solid rgba(11,94,168,0.19)}
-.progress{height:9px;background:rgba(0,0,0,0.05);border-radius:8px;margin-top:14px;overflow:hidden;}
-.progress>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));width:0%;transition:width .3s ease;}
-.panel{width:340px;min-width:230px}
-.panel .card{background:var(--card);padding:14px;border-radius:13px;box-shadow:0 6px 19px rgba(13,47,81,0.06);margin-bottom:16px}
-textarea,input,select{width:100%;padding:9px 12px;border-radius:8px;border:1.2px solid rgba(11,94,168,0.09);font-size:15px;background:#fff}
-.small{font-size:1.01rem;color:var(--muted)}
-.slide-actions{display:flex;gap:8px;margin-top:13px;flex-wrap:wrap}
-.note{font-size:1.1rem;background:#fff8e6;padding:12px 11px;border-radius:8px;border:1px solid rgba(0,0,0,0.03);margin-top:13px}
-.output{background:#e9f5ff;padding:11px 10px;margin-top:12px;border-radius:8px;max-height:200px;overflow:auto;font-size:1.07rem}
-.actions-inline{display:flex;gap:8px;align-items:center}
-.footer{max-width:var(--maxw);margin:11px auto 38px;padding:0 16px;color:var(--muted);text-align:center;font-size:1.08rem}
-@media (max-width:1080px){.container{flex-direction:column}.panel{width:100%}}
-:focus{outline:3px solid rgba(10,117,194,0.14);outline-offset:2px}
-@media print{
-  body{background:none;color:#000}
-  .controls,.panel,footer,header{display:none}
-  .slide{position:relative;box-shadow:none;border-radius:0;margin:0;padding:10mm;page-break-after:always;background:transparent}
-  @page{size:A4;margin:var(--print-edge)}
-}
-/* تفاعل نشط ومحاكاة */
-.timer{background:#f0f7ff;padding:9px 13px;border-radius:8px;display:inline-flex;align-items:center;gap:8px;font-size:1.03rem;margin-bottom:13px;font-weight:bold;}
-.timer-icon{color:var(--accent);font-size:1.25rem}
-.time-up{background:#ffe6e6;animation:pulse 1.5s infinite}
-@keyframes pulse{0%{opacity:1}50%{opacity:0.7}100%{opacity:1}}
-.activity-card{background:#f8fbff;border:1.2px solid rgba(11,94,168,0.09);border-radius:8px;padding:14px;margin:13px 0}
-.activity-card h3{margin:0 0 8px;font-size:1.08rem;color:var(--accent)}
-.quiz-option{padding:8px 7px;border:1px solid rgba(11,94,168,0.15);border-radius:7px;margin:7px 0;cursor:pointer;transition:all 0.19s;font-size:1.1rem;}
-.quiz-option:hover{background:rgba(11,94,168,0.08);}
-.quiz-option.selected{background:rgba(11,94,168,0.15);border-color:var(--accent);}
-.quiz-result{background:#e8f5e8;padding:11px 10px;border-radius:8px;margin-top:13px;display:none;font-size:1.07rem;}
-.timeline{position:relative;padding-right:23px;margin:16px 0}
-.timeline-item{position:relative;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(11,94,168,0.11)}
-.timeline-item:last-child{border-bottom:none}
-.timeline-item::before{content:'';position:absolute;right:-21px;top:6px;width:13px;height:13px;border-radius:50%;background:var(--accent)}
-.timeline-item.current::before{background:#4caf50;box-shadow:0 0 0 3px rgba(76,175,80,0.2)}
-.timeline-time{font-size:0.89rem;color:var(--muted);margin-bottom:5px}
-.timeline-content{font-size:1.07rem;}
-.self-assessment{background:#f9f9ff;border-radius:9px;padding:14px;margin:14px 0}
-.assessment-question{margin-bottom:13px}
-.assessment-options{display:flex;gap:10px;flex-wrap:wrap}
-.assessment-option{flex:1;min-width:85px;text-align:center;padding:7px 4px;border:1.4px solid rgba(11,94,168,0.19);border-radius:7px;cursor:pointer;transition:all 0.2s;font-size:1.08rem;}
-.assessment-option:hover{background:rgba(11,94,168,0.07);}
-.assessment-option.selected{background:var(--accent);color:white}
-::-webkit-scrollbar{width:8px;background:rgba(18,120,170,0.06);}::-webkit-scrollbar-thumb{background:#bee4ff;border-radius:5px;}
-a{color:var(--accent-2);text-decoration:none;font-weight:500} a:hover{text-decoration:underline}
-.logo-school{margin-bottom:14px;margin-top:3px;}
-.logo-school img{height:42px;}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دورة الذكاء الاصطناعي في التعليم - مدرسة إشراق اليمن</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #4e54c8;
+            --primary-light: #8f94fb;
+            --secondary: #2c3e50;
+            --accent: #ff7e5f;
+            --light: #f0f2ff;
+            --white: #ffffff;
+            --muted: #5d7599;
+            --success: #27ae60;
+            --warning: #e67e22;
+            --danger: #e74c3c;
+            --radius: 18px;
+            --shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--accent) 0%, #feb47b 100%);
+        }
+        /* --- Reset and body --- */
+        * {margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI','Tahoma','Arial',sans-serif;}
+        body {
+            background: linear-gradient(135deg, var(--light) 0%, #e1effa 100%);
+            color: var(--secondary);
+            min-height:100vh;
+        }
+        .container {
+            max-width: 1500px; margin:0 auto; padding:20px;
+        }
+        /* --- Header --- */
+        header {
+            background: var(--white); border-radius: var(--radius); padding:30px 40px; margin-bottom:30px;
+            box-shadow: var(--shadow); text-align:center; position:relative; overflow:hidden;
+            animation: headerSlide 1s ease-out;
+        }
+        @keyframes headerSlide {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        header::before {
+            content:''; position:absolute; top:0; right:0; width:100%; height:5px;
+            background: var(--gradient);
+        }
+        .school-badge {
+            display:inline-flex; align-items:center; gap:10px;
+            background:var(--light); padding:8px 20px; border-radius:30px; margin-bottom:15px;
+            font-weight:600; color:var(--primary);
+            animation: badgePulse 2s infinite;
+        }
+        @keyframes badgePulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        header h1 { 
+            color:var(--primary); 
+            font-size:2.4rem; 
+            margin-bottom:10px; 
+            font-weight:800; 
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        header p { color:var(--muted); font-size:1.2rem; max-width:900px; margin:0 auto 15px; }
+        .trainer-info {
+            display:inline-flex; align-items:center; gap:10px;
+            background: #fff8e6; padding:8px 20px; border-radius:30px; font-weight:600; color:var(--warning);
+            border: 1px solid rgba(243,156,18,0.2);
+        }
+        /* --- Progress/pro interface --- */
+        .progress-bar { height:8px; background:#e1effb; border-radius:4px; overflow:hidden; margin-bottom:25px; }
+        .progress { height:100%; background:var(--gradient); width:0%; 
+            transition: width 0.5s ease; border-radius:4px;}
+        .slides-nav { display:flex; justify-content:center; flex-wrap:wrap; gap:12px; margin-bottom:25px;}
+        .nav-dot {width:16px;height:16px; border-radius:50%; background:#ddd;cursor:pointer;transition:var(--transition);}
+        .nav-dot.active {background:var(--primary);transform:scale(1.3);box-shadow:0 0 0 3px rgba(44, 90, 160, 0.2);}
+        /* --- Slides Layout --- */
+        .main-content { display:flex; gap:30px; margin-bottom:40px;}
+        @media (max-width: 1200px) {.main-content{flex-direction:column;}}
+        .slides-container { flex:1; background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden;}
+        .slide {padding: 35px 40px; display:none; height:100%; overflow-y:auto;}
+        .slide.active {display:block; animation:fadeIn 0.5s;}
+        @keyframes fadeIn { from{opacity:0;transform:translateY(15px);} to{opacity:1;transform:translateY(0);} }
+        .slide-header {
+            display:flex;justify-content:space-between;align-items:center;
+            margin-bottom:25px;padding-bottom:20px;border-bottom:2px solid #e1effb;
+        }
+        .slide h2 {color:var(--primary);font-size:1.8rem;font-weight:800;}
+        .slide-time { font-size:1.1rem;color:var(--muted);font-weight:600;background:#f0f7ff;
+            padding:8px 15px;border-radius:30px;}
+        .slide-content { font-size:1.15rem;}
+        /* --- Activity/box --- */
+        .activity-card,.concept-card {
+            background:#f7fbff; border:1px solid rgba(44,90,160,0.1); border-radius:15px;
+            padding:25px; margin:25px 0; box-shadow:0 4px 15px rgba(0,0,0,0.03);
+            transition: var(--transition);
+        }
+        .activity-card:hover, .concept-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .activity-card h3, .concept-card h3 {
+            color:var(--primary); margin-bottom:18px; font-size:1.25rem; display:flex;align-items:center;gap:10px;
+        }
+        .input-group label { display:block; margin-bottom:8px; font-weight:600; color:var(--secondary);}
+        input, textarea, select {
+            width:100%; padding:12px 15px; border:1px solid #ddd; border-radius:9px; font-size:1.05rem;
+            transition:var(--transition); background:var(--white);}
+        input:focus, textarea:focus, select:focus {
+            outline:none; border-color:var(--primary); box-shadow:0 0 0 3px rgba(44,90,160,0.1);
+        }
+        button { 
+            background:var(--gradient); 
+            color:white; 
+            border:none; 
+            padding:13px 21px; 
+            border-radius:9px; 
+            cursor:pointer; 
+            font-size:1.05rem; 
+            font-weight:600; 
+            transition:var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        button:hover{
+            transform:translateY(-3px);
+            box-shadow:0 7px 15px rgba(44,90,160,0.2);
+        }
+        button:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.1);
+            transform: translateX(-100%);
+            transition: transform 0.3s;
+        }
+        button:hover:after {
+            transform: translateX(100%);
+        }
+        .output-box { background:#e8f5ff; border-radius:8px; padding:14px; margin-top:12px; max-height:220px; overflow-y:auto; border-right:4px solid var(--primary-light);}
+        .tip-box {
+            background:#e8f6ef; 
+            border-radius:10px; 
+            padding:13px; 
+            margin:11px 0; 
+            border-right:4px solid var(--success);
+            animation: tipPulse 3s infinite;
+        }
+        @keyframes tipPulse {
+            0% { box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(39, 174, 96, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(39, 174, 96, 0); }
+        }
+        .tip-box i {color:var(--success);margin-left:8px;}
+        .concept-card {background:#f2effd;border-right:4px solid #8e44ad;}
+        .concept-title {color:#8e44ad;font-weight:bold;}
+        
+        /* --- Teacher Support Section --- */
+        .teacher-support {
+            background: #fff8f0;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            border-right: 4px solid var(--accent);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .teacher-support h3 {
+            color: var(--accent);
+            margin-bottom: 18px;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .support-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .support-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+        .support-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .support-item h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* --- Challenge Section --- */
+        .challenge-card {
+            background: #fff0f0;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            border-right: 4px solid var(--danger);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .challenge-card h3 {
+            color: var(--danger);
+            margin-bottom: 18px;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .solution-card {
+            background: #f0fff0;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            border-right: 4px solid var(--success);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .solution-card h3 {
+            color: var(--success);
+            margin-bottom: 18px;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* --- Evaluation Section --- */
+        .evaluation-card {
+            background: #fff8f0;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            border-right: 4px solid var(--accent);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .evaluation-card h3 {
+            color: var(--accent);
+            margin-bottom: 18px;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 15px 0;
+        }
+        .quiz-option {
+            padding: 12px 15px;
+            background: #fff;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .quiz-option:hover {
+            border-color: var(--primary-light);
+            background: #f0f7ff;
+        }
+        .quiz-option.selected {
+            border-color: var(--primary);
+            background: #e8f5ff;
+        }
+        .quiz-submit {
+            background: var(--gradient-accent);
+            margin-top: 15px;
+        }
+        
+        /* --- Results and Charts --- */
+        .results-panel {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .results-panel h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+        }
+        .score-display {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 20px 0;
+            color: var(--primary);
+        }
+        .score-progress {
+            height: 20px;
+            background: #e1effb;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        .score-progress-bar {
+            height: 100%;
+            background: var(--gradient);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        
+        /* --- Grade Resources --- */
+        .grade-selector {margin-bottom:15px;}
+        .grade-resources {display:none;}
+        .grade-resources.active {display:block;}
+        .resource-link {display:block;padding:10px;background:#f0f7ff;margin-bottom:8px;border-radius:8px;text-decoration:none;color:var(--secondary);transition:var(--transition);}
+        .resource-link:hover {background:#e1effb;transform:translateX(-3px);}
+        
+        /* --- Tools Panel for tips or quick tools --- */
+        .tools-panel { width:370px; background:var(--white); border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;display:flex;flex-direction:column;gap:20px;}
+        @media (max-width: 1200px) {.tools-panel{width:100%;}}
+        .panel-section {background:#f9fbff;border-radius:14px;padding:15px;box-shadow:0 4px 12px rgba(0,0,0,0.03);}
+        .panel-section h3{color:var(--primary);margin-bottom:10px;font-size:1.1rem;}
+        .tool-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:11px;}
+        .tool-item{
+            background:#f0f7ff;
+            padding:10px;
+            border-radius:8px;
+            text-align:center;
+            transition:var(--transition);
+            cursor: pointer;
+        }
+        .tool-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background: var(--gradient);
+            color: white;
+        }
+        .footer{text-align:center;color:var(--muted);padding:18px;font-size:1rem;background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);}
+        
+        /* Support Section */
+        .support-section {background:#f0f9ff;padding:20px;border-radius:var(--radius);margin-top:20px;text-align:center;}
+        .support-section h3 {color:var(--primary);margin-bottom:10px;}
+        
+        /* Interface: theme toggle + review */
+        .theme-toggle {
+            position:fixed; top:25px; left:25px; background:var(--gradient); color:white;
+            border:none; width:45px;height:45px; border-radius:50%; display:flex;align-items:center;justify-content:center;
+            cursor:pointer;box-shadow:var(--shadow);z-index:100; font-size:1.15rem;transition:var(--transition);}
+        .theme-toggle:hover {transform:rotate(15deg);}
+        .review-btn{
+            position:fixed; top:80px; left:30px; background:var(--accent); color:white; border:none;
+            border-radius:30px;transition:0.2s;padding:7px 23px;font-weight:bold;cursor:pointer;z-index:102;font-size:1.04rem;}
+        .review-btn:hover{background:#d35400;transform:scale(1.04);}
+        .review-panel{
+            position:fixed; top:100px; left:30px; background:white; border:1px solid #eee; box-shadow:var(--shadow); border-radius:12px; max-height:80vh; overflow:auto; width:330px; padding:15px; z-index:999; display:none;
+        }
+        .review-panel.active{display:block;}
+        .review-panel h3{margin-bottom:15px;color:var(--primary);}
+        .slide-mini-list{list-style:none;padding:0;}
+        .slide-mini-list li{margin:7px 0;padding:3px 10px;border-radius:8px;cursor:pointer;background:#f7f9ff;}
+        .slide-mini-list li.active{background:var(--primary-light);color:white;}
+        .slide-mini-list li:hover{background:#e1effb;}
+        .review-panel button{margin-top:10px;}
+        @media(max-width:700px){
+            .container{padding:5px;}
+            .slide{padding: 10px 6px;}
+            .tools-panel{padding:10px;}
+            header{padding:15px;}
+        }
+        
+        /* Highlight for important text */
+        .highlight {background:#fffacd;padding:2px 5px;border-radius:4px;font-weight:bold;}
+        
+        /* Group activity styling */
+        .group-activity {background:#e8f4f8;border-radius:15px;padding:20px;margin:20px 0;}
+        .group-activity h3 {color:#1a6a8d;display:flex;align-items:center;gap:10px;}
+        
+        /* Celebration animation */
+        @keyframes celebrate {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .celebrate {
+            animation: celebrate 0.5s ease;
+        }
+        
+        /* Fun elements */
+        .fun-element {
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
 </head>
 <body>
-<header>
-  <div class="logo-school">
-    <img src="https://i.imgur.com/OIc1JSX.png" alt="شعار مدارس إشراق اليمن">
-  </div>
-  <h1>دورة الذكاء الاصطناعي في التعليم</h1>
-  <h2>نموذج تدريبي تفاعلي نهائي للمدرّبين</h2>
-  <div class="trainer-info">إعداد وتقديم: <strong>إبراهيم متاش</strong> – <span>مدارس إشراق اليمن الأهلية الحديثة</span></div>
-  <div style="font-size:1.08rem;margin-top:7px;">الموعد: ....................................... المكان: ......................................</div>
-</header>
-
-<main>
-  <div class="container" role="main">
-    <div class="slides" id="slides" aria-live="polite">
-
-<!-- الشرائح: مرحباً بك! 1 -->
-<section class="slide" id="slide-1" role="group" aria-labelledby="s1-title">
-  <h2 id="s1-title">١. الترحيب، المقدمة وأهداف الورشة <span class="small">٥ دقائق</span></h2>
-  <div class="timer" id="timer-1"><span class="timer-icon">⏱️</span><span id="timer-text-1">05:00</span></div>
-  <div class="meta">التعارف وأهداف اللقاء</div>
-  <ul>
-    <li>تعرّف على مفهوم الذكاء الاصطناعي والتمييز الأساسي بينه وبين الأتمتة البرمجية.</li>
-    <li>اكتشاف تطبيقات وأثر الذكاء الاصطناعي في التعليم.</li>
-    <li>اختبار أدوات تفاعلية وتعلّم كتابة Prompts فعالة.</li>
-  </ul>
-  <div class="activity-card">
-    <h3>نشاط: شارك توقعك!</h3>
-    <p>اكتب توقعًا واحدًا ترغب تحقيقه اليوم:</p>
-    <input id="expectationInput" placeholder="اكتب توقعك هنا..." aria-label="توقع" />
-    <button id="addExpectationBtn" style="margin-top:8px">إضافة</button>
-  </div>
-  <div class="output" id="expectationsList" aria-live="polite" style="margin-top:10px"></div>
-</section>
-
-<!-- جدول الأعمال 2 -->
-<section class="slide" id="slide-2" role="group" aria-labelledby="s2-title">
-  <h2 id="s2-title">٢. جدول الأعمال والهيكلة <span class="small">٢ دقائق</span></h2>
-  <div class="timer" id="timer-2"><span class="timer-icon">⏱️</span><span id="timer-text-2">02:00</span></div>
-  <div class="meta">خريطة اليوم بالتوقيت</div>
-  <div class="timeline">
-      <div class="timeline-item current"><div class="timeline-time">٥ د</div><div class="timeline-content">مرحبا وأهداف اللقاء</div></div>
-      <div class="timeline-item"><div class="timeline-time">٢ د</div><div class="timeline-content">جدول الأعمال</div></div>
-      <div class="timeline-item"><div class="timeline-time">٨ د</div><div class="timeline-content">ما هو الذكاء الاصطناعي؟</div></div>
-      <div class="timeline-item"><div class="timeline-time">١٠ د</div><div class="timeline-content">تطبيقات واقعية</div></div>
-      <div class="timeline-item"><div class="timeline-time">١٠ د</div><div class="timeline-content">أدوات تعليمية</div></div>
-      <div class="timeline-item"><div class="timeline-time">١٠ د</div><div class="timeline-content">فن كتابة Prompts</div></div>
-      <div class="timeline-item"><div class="timeline-time">٢٥ د</div><div class="timeline-content">نشاط عملي وجماعي</div></div>
-      <div class="timeline-item"><div class="timeline-time">٨ د</div><div class="timeline-content">التقييم والتغذية الراجعة</div></div>
-      <div class="timeline-item"><div class="timeline-time">٧ د</div><div class="timeline-content">أخلاقيات وخصوصية</div></div>
-      <div class="timeline-item"><div class="timeline-time">٣ د</div><div class="timeline-content">خطوتك التالية</div></div>
-  </div>
-</section>
-
-<!-- تعريف الذكاء الاصطناعي 3 -->
-<section class="slide" id="slide-3" role="group" aria-labelledby="s3-title">
-  <h2 id="s3-title">٣. ما هو الذكاء الاصطناعي؟ <span class="small">٨ دقائق</span></h2>
-  <div class="timer" id="timer-3"><span class="timer-icon">⏱️</span><span id="timer-text-3">08:00</span></div>
-  <div class="meta">تعريف وتوضيح عملي</div>
-  <p>الذكاء الاصطناعي: مجموعة تقنيات وأنظمة تُحاكي القدرات البشرية في التعلم، التحليل والتكيّف الذاتي عبر معالجة البيانات وصنع قرارات (شبه بشرية).</p>
-  <div class="activity-card">
-    <h3>نشاط سريع: تطبيقات واقعية</h3>
-    <p>أي من التطبيقات التالية ترى أثره أكبر في التعليم؟</p>
-    <div class="quiz-option" data-correct="false">إنشاء محتوى مخصص للطلاب</div>
-    <div class="quiz-option" data-correct="false">تقييم تلقائي وسريع</div>
-    <div class="quiz-option" data-correct="true">كل ما سبق</div>
-    <div class="quiz-result" id="quiz-result-3">
-      <strong>الإجابة الصحيحة:</strong> كل ما سبق – الذكاء الاصطناعي يدعم جميع هذه الجوانب وأكثر!
+    <button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></button>
+    <button class="review-btn" id="reviewBtn">مراجعة الشرائح</button>
+    <div class="review-panel" id="reviewPanel">
+        <h3>مراجعة الشرائح وتبديلها</h3>
+        <ul class="slide-mini-list" id="slideMiniList"></ul>
+        <button onclick="closeReview()">إغلاق</button>
     </div>
-  </div>
-</section>
-
-<!-- حالات استخدام 4 -->
-<section class="slide" id="slide-4" role="group" aria-labelledby="s4-title">
-  <h2 id="s4-title">٤. حالات استخدام الذكاء الاصطناعي في التعليم <span class="small">١٠ دقائق</span></h2>
-  <div class="timer" id="timer-4"><span class="timer-icon">⏱️</span><span id="timer-text-4">10:00</span></div>
-  <div class="meta">أمثلة من الواقع التعليمي</div>
-  <ul>
-    <li>تصميم خطط دروس وأنشطة مخصصة لكل طالب/مجموعة</li>
-    <li>توليد أسئلة تقييمية وتقارير أداء مختصرة</li>
-    <li>دعم التوجيه الذاتي للطالب وتقديم تغذية راجعة فورية</li>
-    <li>تسهيل إنتاج أوراق عمل واختبارات بسرعة</li>
-  </ul>
-  <div class="activity-card">
-    <h3>مناقشة جماعية</h3>
-    <p>ما هو التحدي الأكثر بحثاً عن حل في التعليم لديك؟</p>
-    <textarea id="challengeInput" rows="2" placeholder="اكتب التحدي هنا..."></textarea>
-    <button id="saveChallengeBtn" style="margin-top:8px">حفظ</button>
-  </div>
-</section>
-
-<!-- أدوات مقترحة 5 -->
-<section class="slide" id="slide-5" role="group" aria-labelledby="s5-title">
-  <h2 id="s5-title">٥. أدوات تعليمية مقترحة <span class="small">١٠ دقائق</span></h2>
-  <div class="timer" id="timer-5"><span class="timer-icon">⏱️</span><span id="timer-text-5">10:00</span></div>
-  <div class="meta">روابط وأدوات مقترحة وآمنة</div>
-  <ul>
-    <li>منصات توليد محتوى (أسئلة، ملخصات، عروض...)</li>
-    <li>أدوات للتقييم الذاتي والتحليل التكويني</li>
-    <li>برمجيات لضبط جودة وتصحيح أصالة الأعمال</li>
-  </ul>
-  <div class="activity-card">
-    <h3>جرب: أنشئ سؤالاً عبر الذكاء الاصطناعي</h3>
-    <p>اكتب موضوعاً وسينتج لك نموذج سؤال:</p>
-    <input id="contentTopic" placeholder="موضوع تعليمي..." />
-    <button id="generateQuestionBtn" style="margin-top:8px">إنشاء سؤال</button>
-    <div class="output" id="generatedQuestion" style="margin-top:10px"></div>
-  </div>
-</section>
-
-<!-- فن كتابة prompt فعال 6 -->
-<section class="slide" id="slide-6" role="group" aria-labelledby="s6-title">
-  <h2 id="s6-title">٦. كيف تكتب Prompt تعليمياً فعالاً؟ <span class="small">١٠ دقائق</span></h2>
-  <div class="timer" id="timer-6"><span class="timer-icon">⏱️</span><span id="timer-text-6">10:00</span></div>
-  <div class="meta">مبادئ لصنع طلبات واضحة</div>
-  <ul>
-    <li>كن محدداً في السؤال أو المهمة</li>
-    <li>حدد الفئة العمرية ومستوى المعرفة</li>
-    <li>اطلب أمثلة وتنسيقات واضحة</li>
-    <li>استخدم نبرة مباشرة وخالية من الغموض</li>
-  </ul>
-  <div class="activity-card">
-    <h3>تمرين: حسّن هذا الـPrompt</h3>
-    <p><strong>Prompt ضعيف:</strong> "اكتب أسئلة عن الرياضيات"</p>
-    <textarea id="improvedPrompt" rows="2" placeholder="كيف ستكتبه بشكل أفضل؟"></textarea>
-    <button id="checkPromptBtn" style="margin-top:8px">تحقق من الإجابة</button>
-    <div class="output" id="promptFeedback" style="margin-top:10px;display:none">
-      <strong>مثال محسّن:</strong> "اكتب 5 أسئلة اختيار من متعدد في الرياضيات لطلاب الصف السادس حول الكسور، مع توفير إجابات مختصرة وتفسيرات."
-    </div>
-  </div>
-</section>
-
-<!-- نشاط عملي 7 -->
-<section class="slide" id="slide-7" role="group" aria-labelledby="s7-title">
-  <h2 id="s7-title">٧. نشاط عملي: كتابة Prompt تطبيقي <span class="small">٢٥ دقيقة</span></h2>
-  <div class="timer" id="timer-7"><span class="timer-icon">⏱️</span><span id="timer-text-7">25:00</span></div>
-  <div class="meta">نشاط جماعي تفاعلي</div>
-  <p>في مجموعات: صمموا Prompt تعليمي واضح. جربوا نتائجه في نموذج الذكاء الاصطناعي.</p>
-  <div class="slide-actions">
-    <input id="promptInput" placeholder="اكتب هنا Prompt النموذج..." aria-label="مدخل الـ Prompt" />
-    <button id="simulateBtn">محاكاة إجابة</button>
-  </div>
-  <div class="output" id="promptOutput" aria-live="polite"></div>
-  <div class="activity-card">
-    <h3>قيم Prompt مجموعتك</h3>
-    <div class="assessment-question">
-      <p>هل الطلب واضح ومحدد؟</p>
-      <div class="assessment-options">
-        <div class="assessment-option">ضعيف</div>
-        <div class="assessment-option">مقبول</div>
-        <div class="assessment-option">جيد</div>
-        <div class="assessment-option">ممتاز</div>
-      </div>
-    </div>
-    <div class="assessment-question">
-      <p>هل الـPrompt يحدد الجمهور المستهدف؟</p>
-      <div class="assessment-options">
-        <div class="assessment-option">لا</div>
-        <div class="assessment-option">نعم</div>
-      </div>
-    </div>
-    <button id="saveAssessmentBtn" style="margin-top:8px">حفظ التقييم</button>
-  </div>
-</section>
-
-<!-- التقييم وتغذية راجعة 8 -->
-<section class="slide" id="slide-8" role="group" aria-labelledby="s8-title">
-  <h2 id="s8-title">٨. كيف نقيّم أثر الذكاء الاصطناعي؟ <span class="small">٨ دقائق</span></h2>
-  <div class="timer" id="timer-8"><span class="timer-icon">⏱️</span><span id="timer-text-8">08:00</span></div>
-  <div class="meta">قياس الفاعلية في التعليم</div>
-  <ul>
-    <li>قياس قبلي/بعدي (اختبار، تقييم نشاط)</li>
-    <li>ملاحظات نوعية من الطلاب والمعلمين</li>
-    <li>متابعة مؤشرات الأداء - سرعة الإنجاز/ وضوح المفاهيم</li>
-  </ul>
-  <div class="activity-card">
-    <h3>نشاط: صمّم مقياسك البسيط</h3>
-    <p>اكتب ٣ مؤشرات تقيس نجاح استخدام الذكاء الاصطناعي في درسك:</p>
-    <textarea id="evaluationMetric" rows="3" placeholder="اكتب المقاييس هنا..."></textarea>
-    <button id="saveMetricBtn" style="margin-top:8px">حفظ المقياس</button>
-  </div>
-</section>
-
-<!-- أخلاقيات وخصوصية 9 -->
-<section class="slide" id="slide-9" role="group" aria-labelledby="s9-title">
-  <h2 id="s9-title">٩. أخلاقيات وخصوصية عند استخدام الذكاء الاصطناعي <span class="small">٧ دقائق</span></h2>
-  <div class="timer" id="timer-9"><span class="timer-icon">⏱️</span><span id="timer-text-9">07:00</span></div>
-  <div class="meta">نصائح عملية وأخلاقيات مهمة</div>
-  <ul>
-    <li>التحقق من نتائج الذكاء الاصطناعي وعدم الاعتماد الكلي</li>
-    <li>حماية بيانات ومعلومات الطلاب السرية</li>
-    <li>الشفافية مع الطلاب وأولياء الأمور</li>
-    <li>مواجهة التحيز والتمييز في البيانات</li>
-  </ul>
-  <div class="activity-card">
-    <h3>تمرين: تحليل وضع أخلاقي عملي</h3>
-    <p>ما أهم الاعتبارات الأخلاقية عند توظيف الذكاء الاصطناعي لتصحيح أعمال الطلاب؟</p>
-    <textarea id="ethicalConsiderations" rows="3" placeholder="اكتب اعتباراتك..."></textarea>
-    <button id="saveEthicalBtn" style="margin-top:8px">حفظ الرد</button>
-  </div>
-</section>
-
-<!-- خطة تطبيق عملية 10 -->
-<section class="slide" id="slide-10" role="group" aria-labelledby="s10-title">
-  <h2 id="s10-title">١٠. خطتك الشخصية للتجربة <span class="small">٣ دقائق</span></h2>
-  <div class="timer" id="timer-10"><span class="timer-icon">⏱️</span><span id="timer-text-10">03:00</span></div>
-  <div class="meta">أربع خطوات تطبيقية صغيرة</div>
-  <ol>
-    <li>اختيار أداة واحدة وتجربتها في درس تجريبي</li>
-    <li>جمع ملاحظات من الطلاب والمعلمين</li>
-    <li>تعديل وتحسين الإجراءات وفق النتائج</li>
-    <li>مشاركة النتائج وتوسيع التجربة</li>
-  </ol>
-  <div class="activity-card">
-    <h3>نشاط: اكتب خطوتك التالية</h3>
-    <textarea id="actionPlan" rows="2" placeholder="ما هي أول خطوة لك لتطبيق الذكاء الاصطناعي في درسك؟"></textarea>
-    <button id="savePlanBtn" style="margin-top:8px">حفظ الخطة</button>
-  </div>
-</section>
-
-<!-- موارد وروابط مفيدة 11 -->
-<section class="slide" id="slide-11" role="group" aria-labelledby="s11-title">
-  <h2 id="s11-title">١١. مصادر وروابط أدوات مقترحة <span class="small">دقيقتان</span></h2>
-  <div class="timer" id="timer-11"><span class="timer-icon">⏱️</span><span id="timer-text-11">02:00</span></div>
-  <div class="meta">مراجع للتوسع والتعلّم الذاتي</div>
-  <ul>
-    <li><a href="https://www.yteach.com/" target="_blank">منصة Yteach</a> – مادة واختبار بالعربية</li>
-    <li><a href="https://toolbaz.com/ar/ai-quiz-maker" target="_blank">Toolbaz AI Quiz Maker</a> – اختبارات عربية تفاعلية</li>
-    <li><a href="https://edu.google.com/intl/ar/products/ai/" target="_blank">Google for Education AI</a></li>
-    <li><a href="https://chat.openai.com/" target="_blank">ChatGPT (OpenAI)</a> – بناء المعرفة وصناعة أسئلة</li>
-  </ul>
-  <div class="activity-card">
-    <h3>تنزيل ملخص المواد</h3>
-    <p>يمكنك تنزيل المادة النظرية أو تصدير جميع البيانات:</p>
-    <div style="display:flex;gap:8px;margin-top:8px">
-      <button id="downloadMaterialsBtn">تنزيل المواد</button>
-      <button id="exportAllDataBtn" class="secondary">تصدير جميع البيانات</button>
-    </div>
-  </div>
-</section>
-
-<!-- التقييم النهائي 12 -->
-<section class="slide" id="slide-12" role="group" aria-labelledby="s12-title">
-  <h2 id="s12-title">١٢. الخلاصة والتقييم الشخصي <span class="small">٢ دقائق</span></h2>
-  <div class="timer" id="timer-12"><span class="timer-icon">⏱️</span><span id="timer-text-12">02:00</span></div>
-  <div class="meta">تقييم نفسك ونموذج تغذية راجعة</div>
-  <div class="self-assessment">
-    <h3>تقييم الاستعداد التطبيقي</h3>
-    <div class="assessment-question">
-      <p>مدى استعدادك لتطبيق الذكاء الاصطناعي بعد هذا التدريب؟</p>
-      <div class="assessment-options">
-        <div class="assessment-option">غير مستعد</div>
-        <div class="assessment-option">قليل الاستعداد</div>
-        <div class="assessment-option">مستعد</div>
-        <div class="assessment-option">مستعد جدًا</div>
-      </div>
-    </div>
-    <div class="assessment-question">
-      <p>أكثر نقطة استفدت منها اليوم هي:</p>
-      <textarea id="keyTakeaway" rows="2" placeholder="اكتب هنا ..."></textarea>
-    </div>
-  </div>
-  <p>اكتب ٣ نقاط إيجابية واقتراح واحد للتطوير:</p>
-  <textarea id="feedbackInput" rows="3" placeholder="أدخل تغذيتك الراجعة..." aria-label="تغذية راجعة"></textarea>
-  <div class="slide-actions" style="margin-top:8px">
-    <button id="saveFeedbackBtn">حفظ التغذية الراجعة</button>
-    <button id="exportFeedbackBtn" class="secondary">تصدير CSV</button>
-  </div>
-</section>
-
-<!-- أسئلة متكررة 13 -->
-<section class="slide" id="slide-13" role="group" aria-labelledby="faq-title">
-  <h2 id="faq-title">١٣. أسئلة متكررة حول الذكاء الاصطناعي في التعليم <span class="small">٣ دقائق</span></h2>
-  <div class="meta">ردود على أكثر التساؤلات شيوعاً</div>
-  <ul>
-    <li><strong>هل سيحل الذكاء الاصطناعي مكان المعلم؟</strong><br>لا. هو أداة تمكين وتحسين وليس بديلاً للجانب الإنساني التربوي.</li>
-    <li><strong>ما أبرز المخاطر الأخلاقية؟</strong><br>التحيز البرمجي، الخصوصية، الاعتماد المفرط على التقنية.</li>
-    <li><strong>هل يستطيع الطلاب استخدام أدوات الذكاء الذاتي؟</strong><br>نعم - مع إشراف المعلم وتحديد الهدف وفق الفئة العمرية!</li>
-  </ul>
-</section>
-
-<!-- نصائح ذهبية للمعلمين 14 -->
-<section class="slide" id="slide-14" role="group" aria-labelledby="tips-title">
-  <h2 id="tips-title">١٤. نصائح ذهبية لتفعيل الذكاء الاصطناعي <span class="small">٢ دقائق</span></h2>
-  <div class="meta">أفضل الممارسات لتجربة ناجحة</div>
-  <ul>
-    <li>ابدأ بمشروع بسيط، واسع التقييم لاحقاً.</li>
-    <li>كن شفافًا مع الطلاب وأولياء الأمور في أمام استخدام الذكاء الاصطناعي.</li>
-    <li>راقب النتائج وعدل باستمرار.</li>
-    <li>تعلم من التجارب الناجحة محليًا وعالميًا.</li>
-  </ul>
-</section>
-
-<!-- نشاط تطبيقي جماعي إضافي 15 -->
-<section class="slide" id="slide-15" role="group" aria-labelledby="extra-activity-title">
-  <h2 id="extra-activity-title">١٥. ورشة تطبيقية: حل المشكلات بالذكاء الاصطناعي <span class="small">٧ دقائق</span></h2>
-  <div class="meta">نشاط مجموعات تطبيقية واقعية</div>
-  <p>قسم المشاركين واحمل كل مجموعة مشكلة أو تحديًا واقعيًا. جربوا اقتراح حل عبر أداة أو نموذج ذكاء اصطناعي.<br>
-    <textarea rows="2" style="width:100%;margin-top:9px" placeholder="اكتبوا خلاصة الفريق: ..."></textarea>
-  </p>
-</section>
-
-<!-- مساحة تدوين الأفكار والأسئلة 16 -->
-<section class="slide" id="slide-16" role="group" aria-labelledby="questions-title">
-  <h2 id="questions-title">١٦. مساحة للأسئلة والتدوين <span class="small">للمدرب والمتدربين</span></h2>
-  <p>دوّن أي فكرة أو سؤال جديد ستبحث عنه لاحقًا أو ترغب بطرحه على الحضور أو الخبير:</p>
-  <textarea rows="4" style="width:100%" placeholder="اكتب هنا ..."></textarea>
-</section>
-
-</div>
-<aside class="panel" aria-label="لوحة الأدوات">
-      <div class="card" role="region" aria-labelledby="panel-title-1">
-        <div id="panel-title-1" class="small" style="font-weight:700;margin-bottom:6px">ساعة التوقيت</div>
-        <div id="globalTimer" class="timer" style="justify-content:center;font-weight:bold;font-size:1.13rem">
-          <span class="timer-icon">⏱️</span>
-          <span id="globalTimerText">90:00</span>
+    <div class="container">
+        <header>
+            <div class="school-badge">
+                <i class="fas fa-school"></i>
+                <span>مدرسة إشراق اليمن</span>
+            </div>
+            <h1>دورة الذكاء الاصطناعي في التعليم</h1>
+            <p>دورة معمّقة لمعلمات وإداريات المدرسة من الصف الأول حتى التاسع:<br> نحو تعليم يمني حديث ومبدع باستخدام الذكاء الاصطناعي.</p>
+            <div class="trainer-info"><i class="fas fa-chalkboard-teacher"></i> المدرب: إبراهيم متاش</div>
+        </header>
+        <div class="progress-bar"><div class="progress" id="progressBar"></div></div>
+        <div class="slides-nav" id="slidesNav"></div>
+        <div class="main-content">
+            <div class="slides-container" id="slidesContainer">
+                <!-- الشرائح يتم توليدها تلقائيا من الجافاسكريبت -->
+            </div>
+            <div class="tools-panel">
+                <div class="panel-section">
+                    <h3><i class="fas fa-toolbox"></i> أدوات ذكاء اصطناعي سريعة</h3>
+                    <div class="tool-list">
+                        <div class="tool-item">ChatGPT</div>
+                        <div class="tool-item">Bing AI</div>
+                        <div class="tool-item">Canva AI</div>
+                        <div class="tool-item">Quillbot</div>
+                        <div class="tool-item">ClassDojo</div>
+                        <div class="tool-item">Kahoot</div>
+                    </div>
+                </div>
+                <div class="panel-section">
+                    <h3><i class="fas fa-info-circle"></i> تلميحات سريعة</h3>
+                    <div class="tip-box"><i class="fas fa-bolt"></i> جربي صياغة طلبك بوضوح لتحصلي على نتائج قوية من الذكاء الاصطناعي.</div>
+                </div>
+                <div class="panel-section">
+                    <h3><i class="fas fa-graduation-cap"></i> موارد للمراحل الدراسية</h3>
+                    <div class="grade-selector">
+                        <select id="gradeSelect">
+                            <option value="all">جميع المراحل</option>
+                            <option value="1-3">الصفوف 1-3</option>
+                            <option value="4-6">الصفوف 4-6</option>
+                            <option value="7-9">الصفوف 7-9</option>
+                        </select>
+                    </div>
+                    <div class="grade-resources active" id="allResources">
+                        <a href="#" class="resource-link">نموذج خطة درس ذكية</a>
+                        <a href="#" class="resource-link">أنشطة تفاعلية للرياضيات</a>
+                        <a href="#" class="resource-link">قوالب تواصل مع أولياء الأمور</a>
+                    </div>
+                    <div class="grade-resources" id="grade1-3Resources">
+                        <a href="#" class="resource-link">أنشطة تفاعلية للصفوف الأولى</a>
+                        <a href="#" class="resource-link">قصص تعليمية مخصصة</a>
+                        <a href="#" class="resource-link">ألعاب تعليمية للقراءة والكتابة</a>
+                    </div>
+                    <div class="grade-resources" id="grade4-6Resources">
+                        <a href="#" class="resource-link">تمارين تفاعلية للرياضيات</a>
+                        <a href="#" class="resource-link">أنشطة علوم مبتكرة</a>
+                        <a href="#" class="resource-link">مشاريع تعليمية جماعية</a>
+                    </div>
+                    <div class="grade-resources" id="grade7-9Resources">
+                        <a href="#" class="resource-link">تمارين تحليلية متقدمة</a>
+                        <a href="#" class="resource-link">مشاريع بحثية بسيطة</a>
+                        <a href="#" class="resource-link">مواد إثرائية للموهوبات</a>
+                    </div>
+                </div>
+                
+                <div class="results-panel">
+                    <h3><i class="fas fa-chart-line"></i> تقدمك في الدورة</h3>
+                    <div class="score-display">
+                        <span id="totalScore">0%</span>
+                    </div>
+                    <div class="score-progress">
+                        <div class="score-progress-bar" id="scoreProgressBar" style="width: 0%"></div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="progressChart"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div style="display:flex;gap:8px;margin-top:8px">
-          <button id="startTimerBtn">بدء التوقيت</button>
-          <button id="pauseTimerBtn" class="secondary">إيقاف</button>
+        
+        <div class="support-section">
+            <h3>دعم مستمر بعد انتهاء الدورة</h3>
+            <p>مجموعة واتساب للمشاركة والتشاور - استشارات أسبوعية - تحديثات مستمرة</p>
         </div>
-      </div>
-      <div class="card" role="region" aria-labelledby="panel-title-2">
-        <div id="panel-title-2" class="small" style="font-weight:700;margin-bottom:6px">أمثلة Prompts سريعة</div>
-        <textarea id="promptSamples" rows="4" placeholder="ضع أمثلة مفيدة باللغة العربية..."></textarea>
-        <div style="display:flex;gap:9px;margin-top:8px">
-          <button id="loadSamplesBtn" class="secondary">تحميل عينات</button>
-          <button id="exportPromptsBtn">تصدير CSV</button>
+        
+        <footer class="footer">جميع الحقوق محفوظة &copy; مدرسة إشراق اليمن - المدرب إبراهيم متاش 2025</footer>
+    </div>
+    <script>
+        // الشرائح (المحتوى الاحترافي والمعرفي) - مع الإضافات الجديدة
+        const slidesData = [
+            {
+                title: "الترحيب والأهداف",
+                icon: "fa-handshake",
+                time: "5 دقائق",
+                content: `
+        <p><strong>الهدف:</strong> استكشاف الفرص التعليمية للذكاء الاصطناعي وتحفيز النقاش حول التحديات.</p>
+        <div class="activity-card">
+          <h3><i class="fas fa-comments"></i> سؤال تمهيدي</h3>
+          <p>ما أكثر مهمة تتمنين لو هناك من يساعدك فيها أثناء التدريس؟ هل تظنين أن الذكاء الاصطناعي قد يساعدك؟</p>
+          <textarea placeholder="اكتبي مهمتك المتكررة أو توقعاتك من الدورة..." rows="2"></textarea>
         </div>
-      </div>
-      <div class="card" role="region" aria-labelledby="panel-title-3">
-        <div id="panel-title-3" class="small" style="font-weight:700;margin-bottom:6px">إجراءات عامة</div>
-        <div style="display:flex;flex-direction:column;gap:9px">
-          <div class="actions-inline">
-            <button id="prevBtn" class="secondary">السابق</button>
-            <button id="nextBtn">التالي</button>
-          </div>
-          <div class="actions-inline">
-            <button id="printBtn" class="secondary">طباعة العرض</button>
-            <button id="exportAllBtn" class="secondary">تصدير جميع البيانات</button>
-          </div>
+        <div class="tip-box"><i class="fas fa-lightbulb"></i>
+        الذكاء الاصطناعي موجّه لخدمتكِ وتوفير وقتك، وليس لاستبدالكِ كمعلمة مبدعة!
         </div>
-      </div>
-      <div class="card" role="region" aria-labelledby="panel-title-4">
-        <div id="panel-title-4" class="small" style="font-weight:700;margin-bottom:6px">حفظ محلي وتصدير</div>
-        <div class="small">البيانات تحفظ تلقائيًا في المتصفح.</div>
-        <div style="display:flex;gap:8px;margin-top:8px">
-          <button id="downloadStateBtn" class="secondary">تنزيل نسخة</button>
-          <button id="restoreStateBtn" class="secondary">استعادة نسخة</button>
+        `,
+                evaluation: {
+                    question: "ما هو الهدف الرئيسي من استخدام الذكاء الاصطناعي في التعليم حسب رأيك؟",
+                    options: [
+                        "استبدال المعلمين تماماً",
+                        "مساعدة المعلمين وتوفير وقتهم",
+                        "جعل التعليم أكثر تعقيداً",
+                        "تقليل كلفة التعليم فقط"
+                    ],
+                    correctAnswer: 1
+                }
+            },
+            {
+                title: "التحديات التقنية للغة العربية والذكاء الاصطناعي",
+                icon: "fa-language",
+                time: "12 دقائق",
+                content: `
+        <div class="challenge-card">
+            <h3><i class="fas fa-exclamation-triangle"></i> التحديات الرئيسية للغة العربية</h3>
+            <div class="support-grid">
+                <div class="support-item">
+                    <h4><i class="fas fa-file-pdf"></i> مشكلة ملفات PDF العربية</h4>
+                    <p>معظم أدوات الذكاء الاصطناعي لا تدعم إنشاء ملفات PDF باللغة العربية بشكل صحيح</p>
+                </div>
+                <div class="support-item">
+                    <h4><i class="fas fa-image"></i> النصوص العربية في الصور</h4>
+                    <p>صعوبة إنشاء صور تحتوي على نصوص عربية خالية من الأخطاء</p>
+                </div>
+                <div class="support-item">
+                    <h4><i class="fas fa-database"></i> ضعف المصادر العربية</h4>
+                    <p>قلة وجودة البيانات العربية المدربة عليها أنظمة الذكاء الاصطناعي</p>
+                </div>
+                <div class="support-item">
+                    <h4><i class="fas fa-search"></i> احتكار البيانات</h4>
+                    <p>احتكار شركات مثل جوجل للبيانات يحد من قدرة التطبيقات على تقديم معلومات حديثة</p>
+                </div>
+            </div>
         </div>
-        <input id="restoreFileInput" type="file" accept="application/json" style="display:none" aria-hidden="true" />
-      </div>
-    </aside>
-  </div>
 
-  <div class="progress" aria-hidden="false" style="max-width:var(--maxw);margin:13px auto">
-    <i id="progressBar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:0%"></i>
-  </div>
-</main>
-<footer class="footer" role="contentinfo">
-  جميع الحقوق محفوظة &copy; إبراهيم متاش – <span style="font-weight:600">مدارس إشراق اليمن</span> —<br>
-  اختصارات لوحة المفاتيح: &larr; السابق | &rarr; التالي | P للطباعة — البيانات محفوظة محلياً.
-</footer>
-<script>
-// نفس السكربت الأصلي دون تغيير مع زيادة عدد الشرائح (16 أو 17 حسب الشرائح)
-const slideEls = Array.from(document.querySelectorAll('.slide'));
-const progressBar = document.getElementById('progressBar');
-let current = 0;
-function showSlide(idx, scroll = true){
-  if(idx < 0) idx = 0;
-  if(idx >= slideEls.length) idx = slideEls.length - 1;
-  current = idx;
-  slideEls.forEach((el,i) => {
-    el.classList.toggle('visible', i === idx);
-    el.querySelectorAll('.quiz-result').forEach(result => result.style.display = 'none');
-  });
-  const pct = Math.round(((idx+1)/slideEls.length)*100);
-  progressBar.style.width = pct + '%';progressBar.setAttribute('aria-valuenow', pct);
-  document.querySelectorAll('.timeline-item').forEach((item, i) => {
-    item.classList.toggle('current', i === idx);
-  });
-  if(scroll) slideEls[idx].focus?.();
-}
-showSlide(0);
-document.getElementById('nextBtn').addEventListener('click', () => showSlide(current+1));
-document.getElementById('prevBtn').addEventListener('click', () => showSlide(current-1));
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'ArrowRight') showSlide(current+1);
-  if (e.key === 'ArrowLeft') showSlide(current-1);
-  if (e.key.toLowerCase() === 'p') window.print();
-});
-let globalTimerInterval;
-let globalTimeRemaining = 90 * 60; // 90 min
-let isTimerRunning = false;
-function updateGlobalTimer() {
-  if (!isTimerRunning) return;
-  globalTimeRemaining--;
-  if (globalTimeRemaining <= 0) {
-    globalTimeRemaining = 0;clearInterval(globalTimerInterval);
-    document.getElementById('globalTimer').classList.add('time-up');
-    alert('انتهى وقت الدورة!');
-  }
-  const minutes = Math.floor(globalTimeRemaining / 60);
-  const seconds = globalTimeRemaining % 60;
-  document.getElementById('globalTimerText').textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-}
-document.getElementById('startTimerBtn').addEventListener('click', () => {
-  if (!isTimerRunning) {
-    isTimerRunning = true;globalTimerInterval = setInterval(updateGlobalTimer, 1000);
-    document.getElementById('startTimerBtn').textContent = 'مستمر';
-  }
-});
-document.getElementById('pauseTimerBtn').addEventListener('click', () => {
-  isTimerRunning = false;clearInterval(globalTimerInterval);
-  document.getElementById('startTimerBtn').textContent = 'استئناف';
-});
-const STORAGE_KEY = 'ai_course_trainer_v4_yemen';
-function loadState(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : {
-      expectations:[],prompts:[],feedback:[],challenges:[],
-      assessments:[],metrics:[],ethical:[],plans:[],takeaways:[],promptSamples: ""
-    };
-  }catch(e){ return {expectations:[],prompts:[],feedback:[],challenges:[],assessments:[],metrics:[],ethical:[],plans:[],takeaways:[],promptSamples: ""};}
-}
-function saveState(state){
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
-let state = loadState();
-if (state.promptSamples) {document.getElementById('promptSamples').value = state.promptSamples;}
-function renderList(elId, arr){
-  const el = document.getElementById(elId);
-  if(!el) return;
-  el.innerHTML = '';
-  if(!arr.length){
-    el.textContent = 'لا توجد عناصر حالياً.'; return;
-  }
-  arr.forEach((v, idx) => {
-    const p = document.createElement('div');
-    p.style.display = 'flex';p.style.justifyContent = 'space-between';p.style.alignItems = 'center';p.style.gap = '8px';p.style.marginBottom = '6px';
-    const t = document.createElement('div'); t.textContent = '• ' + v; t.style.flex = '1';
-    const del = document.createElement('button'); del.className = 'secondary'; del.textContent = 'حذف';
-    del.style.fontSize = '13px';
-    del.addEventListener('click', () => {state.expectations.splice(idx,1);saveState(state);renderList('expectationsList', state.expectations);});
-    p.appendChild(t); p.appendChild(del);el.appendChild(p);
-  });
-}
-function renderAllLists(){
-  renderList('expectationsList', state.expectations);
-}
-renderAllLists();
-document.getElementById('addExpectationBtn').addEventListener('click', () => {
-  const v = document.getElementById('expectationInput').value.trim();
-  if(!v){alert('أدخل نصًا للتوقع.');return;}
-  state.expectations.push(v); saveState(state);renderAllLists();
-  document.getElementById('expectationInput').value = '';
-});
-document.getElementById('saveChallengeBtn')?.addEventListener('click', () => {
-  const v = document.getElementById('challengeInput').value.trim();
-  if(!v){ alert('أدخل التحدي.'); return;}
-  state.challenges = state.challenges || [];state.challenges.push(v);saveState(state);
-  document.getElementById('challengeInput').value = '';alert('تم حفظ التحدي.');
-});
-document.getElementById('generateQuestionBtn')?.addEventListener('click', () => {
-  const topic = document.getElementById('contentTopic').value.trim();
-  if(!topic){ alert('أدخل موضوعًا.'); return;}
-  const output = document.getElementById('generatedQuestion');output.textContent = 'جاري إنشاء السؤال...';
-  setTimeout(() => {
-    const questions = [
-      `سؤال حول ${topic}: ما هو العنصر الرئيسي في ${topic}؟\nأ) الخيار الأول\nب) الخيار الثاني\nج) الخيار الثالث\nد) الخيار الرابع`,
-      `سؤال تطبيقي في ${topic}: كيف يمكن تطبيق ${topic} في تعليمك؟\nأ) الطريقة الأولى\nب) الطريقة الثانية\nج) الطريقة الثالثة\nد) الطريقة الرابعة`
-    ];
-    output.textContent = questions[Math.floor(Math.random() * questions.length)];
-  }, 1100);
-});
-document.getElementById('checkPromptBtn')?.addEventListener('click', () => {
-  document.getElementById('promptFeedback').style.display = 'block';
-});
-document.getElementById('saveEthicalBtn')?.addEventListener('click', () => {
-  const v = document.getElementById('ethicalConsiderations').value.trim();
-  if(!v){ alert('أدخل الاعتبارات الأخلاقية.'); return;}
-  state.ethical = state.ethical || [];state.ethical.push(v);saveState(state);
-  document.getElementById('ethicalConsiderations').value = '';alert('تم حفظ الرد.');
-});
-document.getElementById('savePlanBtn')?.addEventListener('click', () => {
-  const v = document.getElementById('actionPlan').value.trim();
-  if(!v){ alert('أدخل خطتك.'); return;}
-  state.plans = state.plans || [];state.plans.push(v);saveState(state);
-  document.getElementById('actionPlan').value = '';alert('تم حفظ الخطة.');
-});
-document.getElementById('saveMetricBtn')?.addEventListener('click', () => {
-  const v = document.getElementById('evaluationMetric').value.trim();
-  if(!v){ alert('أدخل المقياس.');return;}
-  state.metrics = state.metrics || [];state.metrics.push(v);saveState(state);
-  document.getElementById('evaluationMetric').value = '';alert('تم حفظ المقياس.');
-});
-document.querySelectorAll('.assessment-option').forEach(option => {
-  option.addEventListener('click', function() {
-    const parent = this.closest('.assessment-options');
-    parent.querySelectorAll('.assessment-option').forEach(opt => opt.classList.remove('selected'));
-    this.classList.add('selected');
-  });
-});
-document.querySelectorAll('.quiz-option').forEach(option => {
-  option.addEventListener('click', function() {
-    const parent = this.parentElement;
-    parent.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('selected'));
-    this.classList.add('selected');
-    const result = parent.querySelector('.quiz-result');
-    if (result) result.style.display = 'block';
-  });
-});
-document.getElementById('loadSamplesBtn').addEventListener('click', () => {
-  const samples = [
-    'اكتب 5 أسئلة اختيار من متعدد عن دورة الماء مع إجابات مختصرة.',
-    'لخّص درس الثورة الصناعية في 5 نقاط بسيطة لطلاب المرحلة المتوسطة.',
-    'صمّم نشاطاً تفاعلياً لتعلم جدول الضرب مع الحلول.'
-  ].join('\n\n');
-  document.getElementById('promptSamples').value = samples;
-  state.promptSamples = samples;saveState(state);alert('تم تحميل عينات Prompts.');
-});
-document.getElementById('promptSamples').addEventListener('input', function() {
-  state.promptSamples = this.value;saveState(state);
-});
-document.getElementById('simulateBtn')?.addEventListener('click', () => {
-  const v = document.getElementById('promptInput').value.trim();
-  if(!v){ alert('أدخل Prompt.'); return;}
-  const out = document.getElementById('promptOutput');
-  const simulated = [
-    'محاكاة للنموذج: "'+v+'"',
-    '- سؤال 1: ...',
-    '- سؤال 2: ...',
-    '- سؤال 3: ...',
-    '- إجابات مختصرة مرفقة'
-  ].join('\n');
-  out.textContent = simulated;
-  state.prompts = state.prompts || [];state.prompts.push(v);saveState(state);
-});
-document.getElementById('saveFeedbackBtn')?.addEventListener('click', () => {
-  const v = document.getElementById('feedbackInput').value.trim();
-  if(!v){ alert('أدخل التغذية الراجعة.'); return;}
-  state.feedback = state.feedback || [];state.feedback.push(v);saveState(state);
-  document.getElementById('feedbackInput').value = '';alert('تم حفظ التغذية الراجعة.');
-});
-document.getElementById('saveAssessmentBtn')?.addEventListener('click', () => {
-  const assessmentData = {
-    promptClarity: document.querySelectorAll('.assessment-option.selected')[0]?.textContent || 'غير محدد',
-    targetAudience: document.querySelectorAll('.assessment-option.selected')[1]?.textContent || 'غير محدد',
-    timestamp: new Date().toISOString()
-  };
-  state.assessments = state.assessments || [];state.assessments.push(assessmentData);
-  saveState(state);alert('تم حفظ التقييم.');
-});
-document.getElementById('keyTakeaway')?.addEventListener('blur', () => {
-  const v = document.getElementById('keyTakeaway').value.trim();
-  if(v){
-    state.takeaways = state.takeaways || []; state.takeaways.push(v); saveState(state);
-  }
-});
-function exportAsCSV(data, filename) {
-  if (!data || data.length === 0) {alert('لا توجد بيانات للتصدير.');return;}
-  let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
-  if (Array.isArray(data) && typeof data[0] === 'string') {
-    data.forEach(item => {csvContent += '"' + item.replace(/"/g, '""') + '"\n';});
-  } else if (Array.isArray(data) && typeof data[0] === 'object') {
-    const headers = Object.keys(data[0]).join(',');
-    csvContent += headers + '\n';
-    data.forEach(item => {
-      const values = Object.values(item).map(val => typeof val === 'string' ? '"' + val.replace(/"/g, '""') + '"' : val).join(',');
-      csvContent += values + '\n';
-    });
-  }
-  const encodedUri = encodeURI(csvContent);
-  const link = document.createElement("a");
-  link.setAttribute("href", encodedUri);
-  link.setAttribute("download", filename);
-  document.body.appendChild(link);
-  link.click();document.body.removeChild(link);
-}
-document.getElementById('exportPromptsBtn').addEventListener('click', () => {
-  if(!(state.prompts && state.prompts.length)){ alert('لا توجد Prompts للتصدير.'); return;}
-  exportAsCSV(state.prompts, 'prompts.csv');
-});
-document.getElementById('exportFeedbackBtn')?.addEventListener('click', () => {
-  if(!(state.feedback && state.feedback.length)){ alert('لا توجد تغذية راجعة للتصدير.'); return;}
-  exportAsCSV(state.feedback, 'feedback.csv');
-});
-document.getElementById('exportAllBtn').addEventListener('click', () => {
-  const payload = JSON.stringify(state, null, 2);
-  const blob = new Blob([payload], {type:'application/json;charset=utf-8'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'ai_course_data.json';
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-});
-document.getElementById('printBtn').addEventListener('click', () => {window.print();});
-document.getElementById('downloadMaterialsBtn').addEventListener('click', () => {
-  const materials = [
-    "دليل كتابة Prompts الفعالة",
-    "قائمة أدوات الذكاء الاصطناعي للمعلمين",
-    "نموذج خطة تطبيق واقعية",
-    "دليل أخلاقيات وخصوصية"
-  ].join('\n');
-  const blob = new Blob([materials], {type: 'text/plain;charset=utf-8'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');a.href = url;a.download = 'مواد_دورة_وعي_AI.txt';
-  document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
-});
-document.getElementById('restoreStateBtn').addEventListener('click', () => {
-  document.getElementById('restoreFileInput').click();
-});
-document.getElementById('restoreFileInput').addEventListener('change', function(e) {
-  const file = e.target.files[0];if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const newState = JSON.parse(e.target.result);state = newState; saveState(state);renderAllLists();
-      if (state.promptSamples) {document.getElementById('promptSamples').value = state.promptSamples;}
-      alert('تم استعادة البيانات بنجاح!');
-    } catch (err) {alert('خطأ في تحميل الملف. تأكد من صيغة الملف.');}
-  };
-  reader.readAsText(file);this.value = '';
-});
-document.getElementById('downloadStateBtn').addEventListener('click', () => {
-  const payload = JSON.stringify(state, null, 2);
-  const blob = new Blob([payload], {type:'application/json;charset=utf-8'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');a.href = url;a.download = 'ai_course_backup_eshraq.json';
-  document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
-});
-</script>
+        <div class="solution-card">
+            <h3><i class="fas fa-lightbulb"></i> حلول عملية للتغلب على التحديات</h3>
+            <div class="support-grid">
+                <div class="support-item">
+                    <h4><i class="fas fa-file-word"></i> بدائل PDF</h4>
+                    <p>استخدمي ملفات Word أو PowerPoint بدلاً من PDF للغة العربية</p>
+                </div>
+                <div class="support-item">
+                    <h4><i class="fas fa-edit"></i> إضافة النصوص يدوياً</h4>
+                    <p>أنشئي الصور باستخدام الذكاء الاصطناعي ثم أضيفي النصوص العربية يدوياً</p>
+                </div>
+                <div class="support-item">
+                    <h4><i class="fas fa-check-double"></i> التحقق من المعلومات</h4>
+                    <p>تحققي دائماً من دقة المعلومات من مصادر موثوقة قبل استخدامها</p>
+                </div>
+                <div class="support-item">
+                    <h4><i class="fas fa-sync-alt"></i> تحديث المعلومات</h4>
+                    <p>استخدمي أدوات متعددة والبحث المباشر للحصول على أحدث المعلومات</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="teacher-support">
+            <h3><i class="fas fa-tools"></i> استراتيجيات عملية للتعامل مع التحديات</h3>
+            <div class="support-grid">
+                <div class="support-item">
+                    <h4><i class="fas fa-layer-group"></i> العمل المتعدد الطبقات</h4>
+                    <p>استخدمي الذكاء الاصطناعي لتوليد الأفكار والمحتوى الأساسي، ثم قومي بالتعديل يدوياً</p>
+                </div>
+                <div class="support-item">
+                    <h4><i class="fas fa-copy"></i> النسخ واللصق</h4>
+                    <p>انسخي النصوص العربية من الذكاء الاصطناعي وألصقيها في التطبيقات المحلية</p>
+                </div>
+                <div class="support-item">
+                    <h4><i class="fas fa-filter"></i> التصفية والمراجعة</h4>
+                    <p>راجعي وصفّي مخرجات الذكاء الاصطناعي للتأكد من دقتها ومناسبتها للبيئة اليمنية</p>
+                </div>
+                <div class="support-item">
+                    <h4><i class="fas fa-hands-helping"></i> المشاركة المجتمعية</h4>
+                    <p>شاركي الحلول والتجارب الناجحة مع الزميلات لتطوير أفضل الممارسات</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="activity-card">
+            <h3><i class="fas fa-tasks"></i> نشاط عملي: التعامل مع التحديات</h3>
+            <p>اختاري أحد التحديات التالية واقترحي حلاً عملياً للتعامل معها:</p>
+            <ul>
+                <li>إنشاء عرض تقديمي عربي باستخدام الذكاء الاصطناعي</li>
+                <li>التحقق من دقة معلومات تاريخية عن اليمن</li>
+                <li>تصميم نشاط تعليمي باللغة العربية مع صور</li>
+            </ul>
+            <textarea rows="4" placeholder="اكتبي خطتك العملية للتعامل مع التحدي..."></textarea>
+        </div>
+        `,
+                evaluation: {
+                    question: "ما هي أفضل استراتيجية للتعامل مع تحديات اللغة العربية في الذكاء الاصطناعي؟",
+                    options: [
+                        "التوقف عن استخدام الذكاء الاصطناعي مع النصوص العربية",
+                        "استخدام الذكاء الاصطناعي لتوليد المحتوى الأساسي ثم التعديل اليدوي",
+                        "الاعتماد الكامل على مخرجات الذكاء الاصطناعي دون مراجعة",
+                        "الانتظار حتى تحل الشركات هذه المشاكل"
+                    ],
+                    correctAnswer: 1
+                }
+            },
+            {
+                title: "دورة تحضير الدرس باستخدام الذكاء الاصطناعي",
+                icon: "fa-cogs",
+                time: "10 دقائق",
+                content: `
+        <div class="teacher-support">
+            <h3><i class="fas fa-clock"></i> مرحلة التحضير - قبل الحصة</h3>
+            <div class="support-grid">
+                <div class="support-item">
+                    <h4><i class="fas fa-lightbulb"></i> توليد أفكار الدروس</h4>
+                    <p>استخدمي الذكاء الاصطناعي لاستلهام أفكار مبتكرة للدروس والأنشطة</p>
+                </div>
+                <div class="support-item">
+                    <h4><i class="fas fa-bullseye"></i> تحديد الأهداف التعليمية</h4>
+                    <p>مساعدة في صياغة أهداف تعليمية واضحة وقابلة للقياس</p>
+                </div>
+                <div class="support-item">
+                    <h4><i class="fas fa-file-alt"></i> إعداد المحتوى</h4>
+                    <p>توليد نصوص، عروض تقديمية، ومواد تعليمية مخصصة</p>
+                </div>
+                <div class="support-item">
+                    <h4><i class="fas fa-tasks"></i> تخطيط الأنشطة</h4>
+                    <p>تصميم أنشطة تعلم تفاعلية تناسب مختلف أنماط التعلم</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="teacher-support">
+            <h3><i class="fas fa-chalkboard-teacher"></i> مرحلة التنفيذ - أثناء الحصة</h3>
+            <div class="support-grid">
+                <div class="support-item">
+                    <h4><i class="fas fa-question-circle"></i> توليد الأسئلة التفاعلية</h4>
+                    <p>إنشاء أسئلة تفاعلية تلقائية لقياس الفهم</p>
+                </div>
+                <div class="support-item">
+                    <h4><i class="fas fa-users"></i> إدارة الفصل</h4>
+                    <p>مساعدة في إدارة المجموعات والتفاعلات الصفية</p>
+                </div>
+                <div class="support-item">
+                    <h4><i class="fas fa-magic"></i> تكييف المحتوى</h4>
+                    <p>تكييف المحتوى حسب استجابة الطالبات أثناء الحصة</p>
+                </div>
+                <div class="support-item">
+                    <h4><i class="fas fa-gamepad"></i> أنشطة تفاعلية</h4>
+                    <p>إنشاء ألعاب تعليمية تفاعلية فورية</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="teacher-support">
+            <h3><i class="fas fa-chart-bar"></i> مرحلة التقويم - بعد الحصة</h3>
+            <div class="support-grid">
+                <div class="support-item">
+                    <h4><i class="fas fa-check-circle"></i> تصحيح الواجبات</h4>
+                    <p>مساعدة في تصحيح الواجبات وتقديم ملاحظات مخصصة</p>
+                </div>
+                <div class="support-item">
+                    <h4><i class="fas fa-chart-line"></i> تحليل النتائج</h4>
+                    <p>تحليل أداء الطالبات وتحديد مجالات التحسين</p>
+                </div>
+                <div class="support-item">
+                    <h4><i class="fas fa-user-edit"></i> تتبع التقدم</h4>
+                    <p>مراقبة تقدم الطالبات وتقديم تقارير فردية</p>
+                </div>
+                <div class="support-item">
+                    <h4><i class="fas fa-comments"></i> التواصل مع الأهل</h4>
+                    <p>مساعدة في صياغة رسائل تواصل فعالة مع أولياء الأمور</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="activity-card">
+            <h3><i class="fas fa-tasks"></i> نشاط تطبيقي: تحضير درس باستخدام الذكاء الاصطناعي</h3>
+            <p>اختاري درساً من المنهج الدراسي، وحددي كيف يمكن للذكاء الاصطناعي مساعدتك في:</p>
+            <ul>
+                <li>تخطيط الدرس وأهدافه</li>
+                <li>إعداد المواد التعليمية</li>
+                <li>تصميم الأنشطة الصفية</li>
+                <li>تقييم التعلم</li>
+            </ul>
+            <textarea rows="4" placeholder="اكتبي خطتك لتحضير الدرس باستخدام الذكاء الاصطناعي..."></textarea>
+        </div>
+        `,
+                evaluation: {
+                    question: "ما الفائدة الرئيسية لاستخدام الذكاء الاصطناعي في مرحلة تحضير الدرس؟",
+                    options: [
+                        "إلغاء الحاجة للتخطيط",
+                        "توفير الوقت وإثراء المحتوى التعليمي",
+                        "استبدال الخبرة التربوية",
+                        "جعل التحضير أكثر تعقيداً"
+                    ],
+                    correctAnswer: 1
+                }
+            },
+            {
+                title: "الذكاء الاصطناعي وتصميم الأنشطة التفاعلية",
+                icon: "fa-puzzle-piece",
+                time: "7 دقائق",
+                content: `
+        <p><strong>كيفية استخدام الذكاء الاصطناعي لإنشاء أنشطة تفاعلية تناسب كل صف:</strong></p>
+        <ul>
+          <li>إنشاء ألعاب تعليمية ذكية تناسب المراحل العمرية المختلفة</li>
+          <li>تصميم أنشطة تفاعلية باستخدام أدوات مجانية</li>
+          <li>تكييف الأنشطة حسب احتياجات الطالبات</li>
+        </ul>
+        
+        <div class="activity-card">
+          <h3><i class="fas fa-tasks"></i> نشاط تصميم الأنشطة</h3>
+          <p>صممي نشاطاً تفاعلياً باستخدام الذكاء الاصطناعي لدرس من اختيارك، مع تحديد الصف والهدف التعليمي.</p>
+          <textarea rows="2" placeholder="اكتبي فكرة النشاط التفاعلي..."></textarea>
+        </div>
+        `,
+                evaluation: {
+                    question: "ما الفائدة الرئيسية من استخدام الذكاء الاصطناعي في تصميم الأنشطة التعليمية؟",
+                    options: [
+                        "زيادة وقت التحضير للمعلم",
+                        "توفير وقت المعلم وتقديم أنشطة مخصصة",
+                        "جعل الأنشطة أكثر تعقيداً",
+                        "تقليل تفاعل الطلاب"
+                    ],
+                    correctAnswer: 1
+                }
+            },
+            {
+                title: "تقييم الطالبات باستخدام الذكاء الاصطناعي",
+                icon: "fa-chart-line",
+                time: "6 دقائق",
+                content: `
+        <p><strong>أدوات ذكية لتحليل نقاط القوة والضعف لدى الطالبات:</strong></p>
+        <ul>
+          <li>إنشاء اختبارات تقييمية مخصصة لكل طالبة</li>
+          <li>متابعة التقدم الدراسي بشكل فردي وجماعي</li>
+          <li>تحليل نتائج التقييم وتقديم توصيات مخصصة</li>
+        </ul>
+        
+        <div class="activity-card">
+          <h3><i class="fas fa-clipboard-check"></i> نشاط التقييم الذكي</h3>
+          <p>كيف يمكن استخدام الذكاء الاصطناعي لتقييم طالبة تواجه صعوبة في مادة الرياضيات؟ اذكري ثلاث طرق.</p>
+          <textarea rows="2"></textarea>
+        </div>
+        
+        <div class="tip-box"><i class="fas fa-lightbulb"></i>
+        الذكاء الاصطناعي يمكنه تحليل أنماط الأخطاء وتقديم تقارير مفصلة عن أداء الطالبات!
+        </div>
+        `,
+                evaluation: {
+                    question: "كيف يمكن للذكاء الاصطناعي مساعدة المعلم في تقييم الطلاب؟",
+                    options: [
+                        "استبدال المعلم في التقييم تماماً",
+                        "تحليل أنماط الأخطاء وتقديم تقارير مفصلة",
+                        "منح درجات عالية للجميع",
+                        "إلغاء الحاجة للتقييم"
+                    ],
+                    correctAnswer: 1
+                }
+            },
+            {
+                title: "الذكاء الاصطناعي وذوي الاحتياجات الخاصة",
+                icon: "fa-universal-access",
+                time: "6 دقائق",
+                content: `
+        <p><strong>تكييف المناهج للطالبات ذوات صعوبات التعلم:</strong></p>
+        <ul>
+          <li>أدوات مساعدة للطالبات الموهوبات</li>
+          <li>استراتيجيات دمج الطالبات بمختلف قدراتهن</li>
+          <li>تخصيص المحتوى التعليمي حسب الاحتياجات الفردية</li>
+        </ul>
+        
+        <div class="activity-card">
+          <h3><i class="fas fa-heart"></i> نشاط التكييف</h3>
+          <p>تخيلي أن لديكِ طالبة موهوبة في الصف الخامس تحتاج إلى مواد إثرائية، وطالبة أخرى تواجه صعوبات في القراءة. كيف يمكن للذكاء الاصطناعي مساعدتك في تلبية احتياجاتهما المختلفة؟</p>
+          <textarea rows="2"></textarea>
+        </div>
+        `,
+                evaluation: {
+                    question: "ما الفائدة الرئيسية لاستخدام الذكاء الاصطناعي مع ذوي الاحتياجات الخاصة؟",
+                    options: [
+                        "تجاهل احتياجاتهم الخاصة",
+                        "توفير تعليم مخصص يناسب احتياجات كل طالب",
+                        "جعل التعليم أكثر صعوبة",
+                        "زيادة العبء على المعلم"
+                    ],
+                    correctAnswer: 1
+                }
+            },
+            {
+                title: "الذكاء الاصطناعي وإدارة الفصل الدراسي",
+                icon: "fa-users",
+                time: "8 دقائق",
+                content: `
+        <div class="teacher-support">
+            <h3><i class="fas fa-user-clock"></i> إدارة الوقت والموارد</h3>
+            <div class="support-grid">
+                <div class="support-item">
+                    <h4><i class="fas fa-calendar"></i> تخطيط الجدول الدراسي</h4>
+                    <p>مساعدة في إنشاء جداول دراسية متوازنة تراعي الفروق الفردية</p>
+                </div>
+                <div class="support-item">
+                    <h4><i class="fas fa-tasks"></i> تنظيم المهام</h4>
+                    <p>إدارة وتنظيم المهام اليومية والأسبوعية للمعلم والطلاب</p>
+                </div>
+                <div class="support-item">
+                    <h4><i class="fas fa-chart-pie"></i> توزيع الموارد</h4>
+                    <p>تحسين توزيع الموارد والأنشطة حسب احتياجات الطلاب</p>
+                </div>
+                <div class="support-item">
+                    <h4><i class="fas fa-bell"></i> التذكيرات الآلية</h4>
+                    <p>إنشاء نظام تذكيرات للمواعيد والموارد المهمة</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="teacher-support">
+            <h3><i class="fas fa-comments"></i> التواصل الفعال</h3>
+            <div class="support-grid">
+                <div class="support-item">
+                    <h4><i class="fas fa-envelope"></i> التواصل مع أولياء الأمور</h4>
+                    <p>صياغة رسائل تواصل فعالة ومخصصة مع أولياء الأمور</p>
+                </div>
+                <div class="support-item">
+                    <h4><i class="fas fa-bullhorn"></i> الإعلانات الصفية</h4>
+                    <p>إنشاء إعلانات وأنشطة تواصل صفية جذابة</p>
+                </div>
+                <div class="support-item">
+                    <h4><i class="fas fa-file-invoice"></i> التقارير الشهرية</h4>
+                    <p>توليد تقارير أداء شهرية مفصلة للطلاب</p>
+                </div>
+                <div class="support-item">
+                    <h4><i class="fas fa-handshake"></i> الاجتماعات</h4>
+                    <p>تحضير جدول أعمال ومواد للاجتماعات المدرسية</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="activity-card">
+            <h3><i class="fas fa-cogs"></i> نشاط إداري</h3>
+            <p>كيف يمكن للذكاء الاصطناعي مساعدتك في إدارة الفصل الدراسي بشكل أكثر كفاءة؟ اذكري ثلاثة تطبيقات عملية.</p>
+            <textarea rows="3" placeholder="اكتبي أفكارك حول استخدام الذكاء الاصطناعي في إدارة الفصل..."></textarea>
+        </div>
+        `,
+                evaluation: {
+                    question: "ما الفائدة الأساسية لاستخدام الذكاء الاصطناعي في إدارة الفصل الدراسي؟",
+                    options: [
+                        "استبدال دور المعلم في الإدارة",
+                        "تحسين كفاءة العمليات الإدارية وتوفير الوقت",
+                        "تعقيد المهام الإدارية",
+                        "تقليل التواصل مع الطلاب"
+                    ],
+                    correctAnswer: 1
+                }
+            },
+            {
+                title: "الذكاء الاصطناعي والتعلم الشخصي",
+                icon: "fa-user-cog",
+                time: "5 دقائق",
+                content: `
+        <p>
+        <strong>ما هو التعلم المصمم خصيصاً للفرد؟</strong> 
+        <br>أنظمة تقترح دروس أو واجبات مخصصة بناءً على مستوى الطالبة ونتائجها.
+        <br><b>مثال:</b> منصة تقترح لطالبة متعثرة تمارين علاجية وتحفيزية.
+        </p>
+        <div class="activity-card">
+          <h3><i class="fas fa-user"></i> نشاط شخصية طالبة</h3>
+          <p>اختاري طالبة (وصف مبسط)، وتخيلي كيف سيقترح لها الذكاء الاصطناعي خطة تعلم خاصة.</p>
+          <textarea rows="1"></textarea>
+        </div>
+        `,
+                evaluation: {
+                    question: "ما الميزة الرئيسية للتعلم الشخصي باستخدام الذكاء الاصطناعي؟",
+                    options: [
+                        "توفير تعليم مخصص يناسب احتياجات وقدرات كل طالب",
+                        "جعل التعليم موحداً للجميع",
+                        "تقليل تفاعل الطالب",
+                        "زيادة العبء على المعلم"
+                    ],
+                    correctAnswer: 0
+                }
+            },
+            {
+                title: "استخدام الأدوات التعليمية المجانية",
+                icon: "fa-rocket",
+                time: "7 دقائق",
+                content: `
+        <ul>
+          <li><b>ChatGPT:</b> تلخيص، تطوير أسئلة تفاعلية، اقتراح انشطة.</li>
+          <li><b>Bing AI:</b> بحث ذكي وملخصات فورية.</li>
+          <li><b>Canva AI:</b> تصميم أنشطة وملصقات تعليمية بضغطة زر.</li>
+          <li><b>Kahoot:</b> ألعاب ومسابقات مدعومة بالتوصيات.</li>
+        </ul>
+        <div class="activity-card">
+          <h3><i class="fas fa-mouse"></i> جربي بنفسك</h3>
+          <p>اكتبي هدف درس ثم اختاري أداة للحصول على نشاط أو ملخص.</p>
+          <input type="text" placeholder="هدف الدرس...">
+          <select>
+            <option>ChatGPT</option>
+            <option>Bing AI</option>
+            <option>Canva AI</option>
+            <option>Kahoot</option>
+          </select>
+        </div>
+        `,
+                evaluation: {
+                    question: "ما الفائدة من استخدام أدوات الذكاء الاصطناعي المجانية في التعليم؟",
+                    options: [
+                        "توفير الوقت والجهد في إعداد المواد التعليمية",
+                        "استبدال المعلم تماماً",
+                        "جعل العملية التعليمية أكثر تعقيداً",
+                        "تقليل كفاءة التعليم"
+                    ],
+                    correctAnswer: 0
+                }
+            },
+            {
+                title: "كتابة Prompts فعالة",
+                icon: "fa-pen",
+                time: "8 دقائق",
+                content: `
+        <ul>
+          <li>اكتبي طلبك واضحا جدا وحددي صفك وموضوعك وهدفك.</li>
+          <li>جربي أكثر من مرة، وعدلي الطلب وقارني النتائج.</li>
+        </ul>
+        <div class="activity-card">
+          <h3><i class="fas fa-edit"></i> إصقلي طلبك (Prompt)</h3>
+          <p>عدلي الجملة العامة التالية لتكون أكثر دقة:<br>
+            <span class="highlight">"حضّر لي خطة درس."</span>
+          </p>
+          <textarea rows="1" placeholder="حضّر لي خطة درس رياضيات للصف الثالث، عن مفهوم الضرب، مع تمارين إثرائية."></textarea>
+        </div>
+        `,
+                evaluation: {
+                    question: "ما العامل الأكثر أهمية في كتابة prompt فعال للذكاء الاصطناعي؟",
+                    options: [
+                        "الوضوح والتحديد في الطلب",
+                        "استخدام لغة معقدة",
+                        "الطلب العام وغير المحدد",
+                        "كتابة طلب طويل جداً"
+                    ],
+                    correctAnswer: 0
+                }
+            },
+            {
+                title: "نشاط جماعي تطبيقي: سيناريوهات مدرسية",
+                icon: "fa-users-cog",
+                time: "15 دقائق",
+                content: `
+        <p>
+        كل مجموعة تعطى سيناريو واقعي من المدرسة:<br>
+        <ul>
+          <li>مجموعة 1: تصحيح اختبار رياضيات لصف مزدحم بسرعة.</li>
+          <li>مجموعة 2: تحضير عرض تقديمي لقصة قصيرة لبنات الصف الرابع.</li>
+          <li>مجموعة 3: التواصل مع أمهات طالبات بحاجة متابعة فردية.</li>
+        </ul>
+        </p>
+        <div class="activity-card">
+          <h3><i class="fas fa-users"></i> اكتبوا الحل الذكي المقترح لكل سيناريو</h3>
+          <textarea rows="2"></textarea>
+        </div>
+        `,
+                evaluation: {
+                    question: "ما فائدة النشاط الجماعي في تطبيق مفاهيم الذكاء الاصطناعي؟",
+                    options: [
+                        "تطبيق المعرفة في مواقف واقعية وتعزيز التعلم التعاوني",
+                        "إضاعة الوقت في مناقشات غير مجدية",
+                        "تقليل مسؤولية المعلم",
+                        "الاستغناء عن التخطيط الفردي"
+                    ],
+                    correctAnswer: 0
+                }
+            },
+            {
+                title: "التقييم والملاحظات",
+                icon: "fa-clipboard-check",
+                time: "7 دقائق",
+                content: `
+        <div class="activity-card">
+          <h3><i class="fas fa-poll"></i> تقييم تفاعلي</h3>
+          <p>في أي موقف مدرسي ستقومين بتجربة الذكاء الاصطناعي مباشرة بعد الدورة؟<br> ما هي العقبة الأولى التي تتوقعينها؟</p>
+          <textarea rows="2"></textarea>
+        </div>
+        `,
+                evaluation: {
+                    question: "ما الخطوة الأولى التي ستتخذينها لتطبيق ما تعلمتيه في هذه الدورة؟",
+                    options: [
+                        "تحديد موقف تعليمي محدد وتجربة أداة ذكاء اصطناعي مناسبة",
+                        "التوقف عن استخدام الطرق التقليدية فوراً",
+                        "انتظار توجيهات الإدارة",
+                        "عدم تطبيق أي شيء لصعوبة التغيير"
+                    ],
+                    correctAnswer: 0
+                }
+            },
+            {
+                title: "الأخلاقيات والخصوصية",
+                icon: "fa-user-shield",
+                time: "5 دقائق",
+                content: `
+        <p> لا ترفعي بيانات أو صور لطالبات بدون إذن ولي الأمر.<br>
+        لا تعتمدي كلياً على نتائج الذكاء الاصطناعي لتقييم مستوى الطالبة.</p>
+        <div class="activity-card">
+          <h3><i class="fas fa-exclamation-triangle"></i> موقف توعية</h3>
+          <p>لو طلبت منك زميلة رفع قائمة بيانات شخصية لطالبات لأداة ذكاء اصطناعي دون إذن، ماذا ستقترحين عليها؟</p>
+          <textarea rows="1"></textarea>
+        </div>
+        `,
+                evaluation: {
+                    question: "ما المبدأ الأخلاقي الأكثر أهمية عند استخدام الذكاء الاصطناعي في التعليم؟",
+                    options: [
+                        "حماية خصوصية بيانات الطلاب",
+                        "استخدام أحدث التقنيات بغض النظر عن الأخلاقيات",
+                        "تقليل التكاليف بأي طريقة",
+                        "تحقيق النتائج الأكاديمية فقط"
+                    ],
+                    correctAnswer: 0
+                }
+            },
+            {
+                title: "خطة وتجربة أسبوعية للتطبيق",
+                icon: "fa-calendar-check",
+                time: "3 دقائق",
+                content: `
+        <p>حددي تجربة واحدة مع الذكاء الاصطناعي نفذتها/ستنفذينها هذا الأسبوع.
+        <br>ما النتيجة؟ وهل وجدت عائقاً؟</p>
+        <div class="activity-card">
+          <h3><i class="fas fa-calendar"></i> دفتر الإنجاز السريع</h3>
+          <textarea rows="2"></textarea>
+        </div>
+        `,
+                evaluation: {
+                    question: "ما أهمية وضع خطة تطبيقية بعد انتهاء الدورة؟",
+                    options: [
+                        "تحويل المعرفة النظرية إلى ممارسة عملية لتحقيق الفائدة",
+                        "إنهاء المتطلبات الشكلية للدورة",
+                        "إضاعة الوقت في التخطيط",
+                        "التقليل من قيمة المعرفة النظرية"
+                    ],
+                    correctAnswer: 0
+                }
+            }
+        ];
+
+        // تخزين إجابات التقييم
+        let userAnswers = Array(slidesData.length).fill(null);
+        let userScores = Array(slidesData.length).fill(0);
+        
+        // توليد الشرائح
+        function renderSlides() {
+            const sc = document.getElementById('slidesContainer');
+            sc.innerHTML = '';
+            slidesData.forEach((slide, i) => {
+                const div = document.createElement('div');
+                div.className = 'slide' + (i === 0 ? ' active' : '');
+                div.id = 'slide'+(i+1);
+                
+                // إضافة قسم التقييم إذا كان موجوداً
+                let evaluationHTML = '';
+                if (slide.evaluation) {
+                    evaluationHTML = `
+                    <div class="evaluation-card">
+                        <h3><i class="fas fa-star"></i> تقييم فهم الشريحة</h3>
+                        <p>${slide.evaluation.question}</p>
+                        <div class="quiz-options" id="quizOptions-${i}">
+                            ${slide.evaluation.options.map((option, idx) => `
+                                <div class="quiz-option" onclick="selectOption(${i}, ${idx})" id="option-${i}-${idx}">
+                                    ${option}
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button class="quiz-submit" onclick="submitAnswer(${i})" id="submit-${i}">
+                            <i class="fas fa-paper-plane"></i> تقديم الإجابة
+                        </button>
+                        <div id="feedback-${i}" style="margin-top: 15px; display: none;"></div>
+                    </div>
+                    `;
+                }
+                
+                div.innerHTML = `
+                    <div class="slide-header">
+                        <h2><i class="fas ${slide.icon}"></i> ${slide.title}</h2>
+                        <div class="slide-time">الوقت: ${slide.time}</div>
+                    </div>
+                    <div class="slide-content">${slide.content}</div>
+                    ${evaluationHTML}
+                    <div class="nav-controls" style="margin-top:24px;">
+                        ${i>0 ? '<button onclick="gotoSlide('+(i)+')"><i class=\'fas fa-chevron-right\'></i> السابق</button>':''}
+                        ${i<slidesData.length-1 ? '<button onclick="gotoSlide('+(i+2)+')">التالي <i class=\'fas fa-chevron-left\'></i></button>':''}
+                    </div>
+                `;
+                sc.appendChild(div);
+            });
+            
+            // توليد أزرار التنقل
+            const nav = document.getElementById('slidesNav');
+            nav.innerHTML = '';
+            slidesData.forEach((slide, i) => {
+                const dot = document.createElement('div');
+                dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+                dot.setAttribute('onclick', `gotoSlide(${i+1})`);
+                nav.appendChild(dot);
+            });
+            
+            // تحديث قائمة المراجعة
+            updateReviewList();
+        }
+        
+        // تحديد خيار في التقييم
+        function selectOption(slideIndex, optionIndex) {
+            const options = document.querySelectorAll(`#quizOptions-${slideIndex} .quiz-option`);
+            options.forEach(opt => opt.classList.remove('selected'));
+            document.getElementById(`option-${slideIndex}-${optionIndex}`).classList.add('selected');
+            userAnswers[slideIndex] = optionIndex;
+        }
+        
+        // تقديم الإجابة
+        function submitAnswer(slideIndex) {
+            if (userAnswers[slideIndex] === null) {
+                alert('يرجى اختيار إجابة قبل التقديم');
+                return;
+            }
+            
+            const feedbackEl = document.getElementById(`feedback-${slideIndex}`);
+            const submitBtn = document.getElementById(`submit-${slideIndex}`);
+            
+            if (userAnswers[slideIndex] === slidesData[slideIndex].evaluation.correctAnswer) {
+                feedbackEl.innerHTML = '<div style="color: green; font-weight: bold;"><i class="fas fa-check-circle"></i> إجابة صحيحة! أحسنتِ.</div>';
+                userScores[slideIndex] = 1;
+            } else {
+                feedbackEl.innerHTML = `<div style="color: red; font-weight: bold;"><i class="fas fa-times-circle"></i> إجابة خاطئة. الإجابة الصحيحة هي: ${slidesData[slideIndex].evaluation.options[slidesData[slideIndex].evaluation.correctAnswer]}</div>`;
+                userScores[slideIndex] = 0;
+            }
+            
+            feedbackEl.style.display = 'block';
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-check"></i> تم التقديم';
+            submitBtn.style.background = '#ccc';
+            
+            // تحديث الرسم البياني
+            updateProgressChart();
+        }
+        
+        // تحديث الرسم البياني
+        function updateProgressChart() {
+            const totalScore = userScores.reduce((a, b) => a + b, 0);
+            const totalQuestions = userScores.length;
+            const percentage = Math.round((totalScore / totalQuestions) * 100);
+            
+            document.getElementById('totalScore').textContent = `${percentage}%`;
+            document.getElementById('scoreProgressBar').style.width = `${percentage}%`;
+            
+            // تحديث الرسم البياني
+            const ctx = document.getElementById('progressChart').getContext('2d');
+            
+            // إذا كان الرسم البياني موجوداً بالفعل، قم بتدميره أولاً
+            if (window.progressChart) {
+                window.progressChart.destroy();
+            }
+            
+            window.progressChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: slidesData.map((slide, i) => `شريحة ${i+1}`),
+                    datasets: [{
+                        label: 'التقييم',
+                        data: userScores,
+                        backgroundColor: userScores.map(score => score === 1 ? 'rgba(78, 84, 200, 0.7)' : 'rgba(255, 126, 95, 0.7)'),
+                        borderColor: userScores.map(score => score === 1 ? 'rgba(78, 84, 200, 1)' : 'rgba(255, 126, 95, 1)'),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 1,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    return value === 1 ? 'صحيح' : 'خطأ';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y === 1 ? 'إجابة صحيحة' : 'إجابة خاطئة';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // التنقل بين الشرائح
+        let curSlide = 1;
+        function gotoSlide(n) {
+            if (n < 1) n = 1;
+            if (n > slidesData.length) n = slidesData.length;
+            curSlide = n;
+            updateSlides();
+        }
+        
+        function updateSlides() {
+            Array.from(document.querySelectorAll('.slide')).forEach((el,i) => {
+                el.classList.toggle("active", i === curSlide-1);
+            });
+            
+            // تحديث أزرار النقاط
+            Array.from(document.querySelectorAll('.nav-dot')).forEach((el,i) => {
+                el.classList.toggle("active", i === curSlide-1);
+            });
+            
+            // تحديث شريط التقدم
+            document.getElementById('progressBar').style.width = ((curSlide)/slidesData.length*100)+'%';
+            
+            // تحديث قائمة المراجعة
+            updateReviewList();
+        }
+        
+        // إدارة قائمة المراجعة
+        function updateReviewList() {
+            const list = document.getElementById('slideMiniList');
+            list.innerHTML = '';
+            slidesData.forEach((slide, i) => {
+                const li = document.createElement('li');
+                li.textContent = `${i+1}. ${slide.title}`;
+                li.className = i === curSlide-1 ? 'active' : '';
+                if (userScores[i] === 1) {
+                    li.style.background = 'rgba(39, 174, 96, 0.2)';
+                    li.style.borderRight = '3px solid #27ae60';
+                } else if (userAnswers[i] !== null) {
+                    li.style.background = 'rgba(231, 76, 60, 0.2)';
+                    li.style.borderRight = '3px solid #e74c3c';
+                }
+                li.onclick = () => {
+                    gotoSlide(i+1);
+                    closeReview();
+                };
+                list.appendChild(li);
+            });
+        }
+        
+        function closeReview() {
+            document.getElementById('reviewPanel').classList.remove('active');
+        }
+        
+        // إدارة اختيار المرحلة الدراسية
+        document.getElementById('gradeSelect').addEventListener('change', function() {
+            const value = this.value;
+            
+            // إخفاء جميع موارد المراحل
+            document.querySelectorAll('.grade-resources').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // إظهار الموارد المحددة
+            if (value === 'all') {
+                document.getElementById('allResources').classList.add('active');
+            } else {
+                document.getElementById(value + 'Resources').classList.add('active');
+            }
+        });
+        
+        // إدارة زر المراجعة
+        document.getElementById('reviewBtn').addEventListener('click', function() {
+            document.getElementById('reviewPanel').classList.toggle('active');
+        });
+        
+        // تبديل السمة
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            const icon = this.querySelector('i');
+            if (document.body.classList.contains('dark-mode')) {
+                icon.className = 'fas fa-sun';
+                document.body.style.background = 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)';
+                document.body.style.color = '#f0f0f0';
+            } else {
+                icon.className = 'fas fa-moon';
+                document.body.style.background = 'linear-gradient(135deg, var(--light) 0%, #e1effa 100%)';
+                document.body.style.color = 'var(--secondary)';
+            }
+        });
+        
+        // تهيئة الصفحة
+        renderSlides();
+        updateSlides();
+        updateProgressChart();
+    </script>
 </body>
 </html>
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-check"></i> تم التقديم';
+            submitBtn.style.background = '#ccc';
+            
+            // تحديث الرسم البياني
+            updateProgressChart();
+        }
+        
+        // تحديث الرسم البياني
+        function updateProgressChart() {
+            const totalScore = userScores.reduce((a, b) => a + b, 0);
+            const totalQuestions = userScores.length;
+            const percentage = Math.round((totalScore / totalQuestions) * 100);
+            
+            document.getElementById('totalScore').textContent = `${percentage}%`;
+            document.getElementById('scoreProgressBar').style.width = `${percentage}%`;
+            
+            // تحديث الرسم البياني
+            const ctx = document.getElementById('progressChart').getContext('2d');
+            
+            // إذا كان الرسم البياني موجوداً بالفعل، قم بتدميره أولاً
+            if (window.progressChart) {
+                window.progressChart.destroy();
+            }
+            
+            window.progressChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: slidesData.map((slide, i) => `شريحة ${i+1}`),
+                    datasets: [{
+                        label: 'التقييم',
+                        data: userScores,
+                        backgroundColor: userScores.map(score => score === 1 ? 'rgba(78, 84, 200, 0.7)' : 'rgba(255, 126, 95, 0.7)'),
+                        borderColor: userScores.map(score => score === 1 ? 'rgba(78, 84, 200, 1)' : 'rgba(255, 126, 95, 1)'),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 1,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    return value === 1 ? 'صحيح' : 'خطأ';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y === 1 ? 'إجابة صحيحة' : 'إجابة خاطئة';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // التنقل بين الشرائح
+        let curSlide = 1;
+        function gotoSlide(n) {
+            if (n < 1) n = 1;
+            if (n > slidesData.length) n = slidesData.length;
+            curSlide = n;
+            updateSlides();
+        }
+        
+        function updateSlides() {
+            Array.from(document.querySelectorAll('.slide')).forEach((el,i) => {
+                el.classList.toggle("active", i === curSlide-1);
+            });
+            
+            // تحديث أزرار النقاط
+            Array.from(document.querySelectorAll('.nav-dot')).forEach((el,i) => {
+                el.classList.toggle("active", i === curSlide-1);
+            });
+            
+            // تحديث شريط التقدم
+            document.getElementById('progressBar').style.width = ((curSlide)/slidesData.length*100)+'%';
+            
+            // تحديث قائمة المراجعة
+            updateReviewList();
+        }
+        
+        // إدارة قائمة المراجعة
+        function updateReviewList() {
+            const list = document.getElementById('slideMiniList');
+            list.innerHTML = '';
+            slidesData.forEach((slide, i) => {
+                const li = document.createElement('li');
+                li.textContent = `${i+1}. ${slide.title}`;
+                li.className = i === curSlide-1 ? 'active' : '';
+                if (userScores[i] === 1) {
+                    li.style.background = 'rgba(39, 174, 96, 0.2)';
+                    li.style.borderRight = '3px solid #27ae60';
+                } else if (userAnswers[i] !== null) {
+                    li.style.background = 'rgba(231, 76, 60, 0.2)';
+                    li.style.borderRight = '3px solid #e74c3c';
+                }
+                li.onclick = () => {
+                    gotoSlide(i+1);
+                    closeReview();
+                };
+                list.appendChild(li);
+            });
+        }
+        
+        function closeReview() {
+            document.getElementById('reviewPanel').classList.remove('active');
+        }
+        
+        // إدارة اختيار المرحلة الدراسية
+        document.getElementById('gradeSelect').addEventListener('change', function() {
+            const value = this.value;
+            
+            // إخفاء جميع موارد المراحل
+            document.querySelectorAll('.grade-resources').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // إظهار الموارد المحددة
+            if (value === 'all') {
+                document.getElementById('allResources').classList.add('active');
+            } else {
+                document.getElementById(value + 'Resources').classList.add('active');
+            }
+        });
+        
+        // إدارة زر المراجعة
+        document.getElementById('reviewBtn').addEventListener('click', function() {
+            document.getElementById('reviewPanel').classList.toggle('active');
+        });
+        
+        // تبديل السمة
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            const icon = this.querySelector('i');
+            if (document.body.classList.contains('dark-mode')) {
+                icon.className = 'fas fa-sun';
+                document.body.style.background = 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)';
+                document.body.style.color = '#f0f0f0';
+            } else {
+                icon.className = 'fas fa-moon';
+                document.body.style.background = 'linear-gradient(135deg, var(--light) 0%, #e1effa 100%)';
+                document.body.style.color = 'var(--secondary)';
+            }
+        });
+        
+        // تهيئة الصفحة
+        renderSlides();
+        updateSlides();
+        updateProgressChart();
+    </script>
+</body>
+</html>>
+                    <div class="grade-
